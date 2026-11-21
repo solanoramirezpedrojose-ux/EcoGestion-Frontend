@@ -13,7 +13,7 @@ export default function Dashboard() {
     function cerrarSesion(){
         //Eliminamos los datos de autenticacion
         logout();
-
+        
         //Regresamos a la pantalla de login
         navigate('login', { replace: true });
     }
