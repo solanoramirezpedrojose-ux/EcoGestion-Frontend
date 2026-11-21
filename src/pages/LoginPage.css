@@ -1,0 +1,167 @@
+/*Fondo general de la pantalla de login*/
+.ecog-login {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #E8F3ED, #F6F8F7);
+}
+
+/*Contenedor principal del login*/
+.ecog-login-container {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    width: 100%;
+    max-width: 1000px;
+    min-height: 540px;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(20, 61, 50, 0.15);
+}
+
+/*Panel izquierdo de EcoGestion*/
+.ecog-login-aside {
+    background: linear-gradient(145deg, #143D32, #278568);
+    color: white;
+    padding: 55px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/*Icono principal de reciclaje*/
+.ecog-login-brand {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.ecog-login-brand i {
+    font-size: 45px;
+    color: #A8E8BC;
+}
+
+/*Nombre y descripcion del sistema*/
+.ecog-login-aside h1 {
+    font-size: 38px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.ecog-login-aside p {
+    font-size: 17px;
+    color: #D5EADF;
+    line-height: 1.7;
+}
+
+/*Texto inferior del panel izquierdo*/
+.ecog-login-footer {
+    margin-top: 55px;
+    font-size: 14px;
+    color: #A8E8BC;
+}
+
+/*Panel derecho del formulario*/
+.ecog-login-form {
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ecog-form-content {
+    width: 100%;
+    max-width: 360px;
+}
+
+/*Titulos y etiquetas del formulario*/
+.ecog-form-content h2 {
+    color: #143d32;
+}
+.ecog-form-content .form-label {
+    color: #143D32;
+    font-weight: 500;
+}
+
+/*Estilos de los campos de entrada*/
+.ecog-form-content .form-control {
+    padding: 12px;
+    border-color: #DFE6E1;
+}
+.ecog-form-content .input-group-text {
+    background-color: #F6F8F7;
+    border-color: #DFE6E1;
+    color: #278568;
+}
+
+/*Color al seleccionar un campo*/
+.ecog-form-content .form-control:focus {
+    border-color: #278568;
+    box-shadow: 0 0 0 0.2rem rgba(39, 133, 104, 0.15);
+}
+
+/*Boton principal para ingresar*/
+.ecog-login-button {
+    background-color: #278568;
+    color: white;
+    padding: 13px;
+    font-weight: 600;
+    border-radius: 9px;
+    border: none;
+}
+
+/*Efecto del boton al pasar el mouse*/
+.ecog-login-button:hover {
+    background-color: #143D32;
+    color: white;
+}
+.ecog-login-button:disabled {
+    background-color: #7BAA97;
+    color: white;
+}
+
+/*Texto informativo debajo del formulario*/
+.ecog-login-note {
+    text-align: center;
+    font-size: 13px;
+    color: #88978E;
+    margin-top: 35px;
+}
+
+/*Adaptacion del login a pantallas pequenas*/
+@media (max-width: 768px) {
+    .ecog-login {
+        padding: 15px;
+    }
+
+    .ecog-login-container {
+        grid-template-columns: 1fr;
+    }
+
+    .ecog-login-aside {
+        padding: 30px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .ecog-login-aside h1 {
+        font-size: 28px;
+    }
+
+    .ecog-login-aside p {
+        font-size: 14px;
+    }
+
+    .ecog-login-footer {
+        margin-top: 15px;
+    }
+
+    .ecog-login-form {
+        padding: 35px 25px;
+    }
+}
