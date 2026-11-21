@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
     async function login(usernameInput, password) {
         try{
             //Enviamos el usuario y la contrasena a Django    
-            const { data } = await api.post('/token', {
+            const { data } = await api.post('/token/', {
                 username: usernameInput,
                 password
             });
