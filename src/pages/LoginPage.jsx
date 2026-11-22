@@ -34,7 +34,11 @@ export default function LoginPage() {
             navigate('/', { replace: true });
         }catch(err){
             //Mostramos el mensaje si ocurre un error
-            setError(err.message);
+            if(err.response?.status === 400) {
+                setError('Usuario o contraseña incorrectos');
+            }else {
+                setError('No se pudo iniciar sesion. Intente de nuevo')
+            }
         }finally{
             //Finalizamos el estado de carga
             setLoading(false);
