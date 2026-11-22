@@ -1,0 +1,78 @@
+/* Encabezado principal de Inventario */
+.inventario-hero {
+    background: linear-gradient(135deg, #143D32, #278568);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Botón para registrar materiales */
+.inventario-btn-nuevo {
+    background-color: white;
+    color: #143D32;
+    font-weight: 600;
+}
+.inventario-btn-nuevo:hover {
+    background-color: #E8F3ED;
+    color: #143D32;
+}
+
+/* Tarjeta con el total de materiales */
+.inventario-resumen {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    background-color: #E8F3ED;
+    border-radius: 12px;
+    color: #143D32;
+}
+.inventario-resumen i {
+    font-size: 35px;
+    color: #278568;
+}
+.inventario-resumen span {
+    font-size: 14px;
+}
+.inventario-resumen h2 {
+    font-weight: bold;
+    margin: 5px 0 0;
+}
+
+/* Estilos de la tabla */
+.inventario-tabla {
+    border-radius: 12px;
+    overflow: hidden;
+}
+.inventario-tabla thead th {
+    background-color: #E8F3ED;
+    color: #143D32;
+    padding: 15px;
+}
+
+/* Controles de paginación */
+.inventario-paginacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+    color: #64756C;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .inventario-hero {
+        padding: 20px;
+    }
+    .inventario-btn-nuevo {
+        width: 100%;
+    }
+}
