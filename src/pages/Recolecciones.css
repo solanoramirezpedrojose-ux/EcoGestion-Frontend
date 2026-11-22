@@ -1,0 +1,132 @@
+/* Encabezado principal del módulo de Recolecciones */
+.recolecciones-hero {
+    background: linear-gradient(135deg, #143D32, #278568);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Botón para registrar nuevas recolecciones */
+.recolecciones-btn-nueva {
+    background-color: white;
+    color: #143D32;
+    font-weight: 600;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+}
+.recolecciones-btn-nueva:hover {
+    background-color: #E8F3ED;
+    color: #143D32;
+}
+
+/* Tarjeta que muestra el total de recolecciones */
+.recolecciones-resumen {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #E8F3ED;
+    padding: 25px;
+    border-radius: 12px;
+    color: #143D32;
+}
+.recolecciones-resumen i {
+    font-size: 35px;
+    color: #278568;
+}
+.recolecciones-resumen span {
+    font-size: 14px;
+    color: #64756C;
+}
+.recolecciones-resumen h2 {
+    font-weight: bold;
+    margin: 5px 0 0;
+}
+
+/* Tarjetas de filtros y formularios */
+.recolecciones-page .card {
+    border-radius: 12px;
+}
+
+/* Títulos dentro de las tarjetas */
+.recolecciones-page .card h2 {
+    color: #143D32;
+}
+
+/* Apariencia de la tabla de recolecciones */
+.recolecciones-tabla {
+    border-radius: 12px;
+    overflow: hidden;
+}
+.recolecciones-tabla thead th {
+    background-color: #E8F3ED;
+    color: #143D32;
+    padding: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.recolecciones-tabla tbody td {
+    padding: 14px 15px;
+    vertical-align: middle;
+}
+
+/* Efecto al pasar el cursor sobre una fila */
+.recolecciones-tabla tbody tr:hover {
+    background-color: #F3F8F5;
+}
+
+/* Botones de acciones en la tabla */
+.recolecciones-tabla .btn-sm {
+    border-radius: 7px;
+}
+
+/* Estilo para los campos de los formularios */
+.recolecciones-page .form-control:focus,
+.recolecciones-page .form-select:focus {
+    border-color: #278568;
+    box-shadow: 0 0 0 0.2rem rgba(39, 133, 104, 0.15);
+}
+
+/* Controles de paginación */
+.recolecciones-paginacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+    color: #64756C;
+}
+
+/* Adaptamos el diseño a pantallas pequeñas */
+@media (max-width: 768px) {
+    .recolecciones-hero {
+        padding: 20px;
+    }
+    .recolecciones-hero h1 {
+        font-size: 23px;
+    }
+    .recolecciones-btn-nueva {
+        width: 100%;
+    }
+    .recolecciones-resumen {
+        padding: 20px;
+    }
+    .recolecciones-tabla .card-body {
+        padding: 15px !important;
+    }
+    .recolecciones-paginacion {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    .recolecciones-paginacion .d-flex {
+        justify-content: center;
+    }
+}
