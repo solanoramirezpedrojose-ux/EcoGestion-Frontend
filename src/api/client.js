@@ -3,58 +3,126 @@ import axios from 'axios';
 // Obtenemos la dirección de la API desde las variables de entorno
 const baseURL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api').replace(/\/$/, '');
 
-// Se configura Axios para realizar las peticiones al backend
+// Configuramos Axios para realizar peticiones al backend
 export const api = axios.create({
     baseURL,
     timeout: 12000
 });
 
-// Agregamos el token del usuario a las peticiones cuando esté disponible
+// Agregamos el token del usuario a las peticiones
 api.interceptors.request.use(config => {
     const token = sessionStorage.getItem('ecogestion_token');
 
     if(token) {
         config.headers.Authorization = `Token ${token}`;
     }
+
     return config;
 });
 
-// Función para mostrar mensajes de error provenientes de Django
+// Traducimos los mensajes comunes que devuelve Django
+function traducirMensaje(mensaje) {
+    const texto = String(mensaje);
+    const error = texto.toLowerCase();
+
+    if(error.includes('already exists')) {
+        return 'Ya existe un registro con ese valor.';
+    }
+
+    if(error.includes('required')) {
+        return 'Este campo es obligatorio.';
+    }
+
+    if(error.includes('may not be blank')) {
+        return 'Este campo no puede estar vacío.';
+    }
+
+    if(error.includes('valid email')) {
+        return 'Ingrese un correo electrónico válido.';
+    }
+
+    if(error.includes('valid choice')) {
+        return 'Seleccione una opción válida.';
+    }
+
+    if(error.includes('valid number') || error.includes('valid decimal')) {
+        return 'Ingrese un número válido.';
+    }
+
+    if(error.includes('greater than or equal')) {
+        return 'El valor es menor que el mínimo permitido.';
+    }
+
+    if(error.includes('less than or equal')) {
+        return 'El valor supera el máximo permitido.';
+    }
+
+    // Si no conocemos el error, mostramos el mensaje de Django
+    return texto;
+}
+
+// Función general para mostrar errores del backend
 export function getError(error) {
 
-    // Verificamos si existe un error de conexión con el servidor
+    // Comprobamos si Django está disponible
     if(!error.response) {
-        return 'No se puede conectar con Django, compruebe el servidor';
+        return 'No se puede conectar con Django. Compruebe que el servidor esté funcionando.';
     }
 
-    // Obtenemos la información del error
     const data = error.response.data;
+    const codigo = error.response.status;
 
-    // Evitamos mostrar páginas HTML completas de Django
+    // Evitamos mostrar páginas HTML de Django
     if(typeof data === 'string' && data.trim().startsWith('<')) {
-        return `Error HTTP ${error.response.status}. Verifique la ruta de la API.`;
+        if(codigo === 404) {
+            return 'No se encontró el registro o la dirección solicitada.';
+        }
+
+        return `Ocurrió un error en el servidor (${codigo}).`;
     }
 
-    // Si el error es texto normal, lo mostramos
+    // Si Django devuelve un mensaje de texto
     if(typeof data === 'string') {
-        return data;
+        return traducirMensaje(data);
     }
 
-    // Mostramos errores generales de validación
-    if(data?.non_field_errors) {
-        return data.non_field_errors.join(', ');
+    // Si Django devuelve varios errores generales
+    if(Array.isArray(data)) {
+        return data.map(mensaje => traducirMensaje(mensaje)).join(' ');
     }
 
-    // Mostramos mensajes de error enviados por Django
-    if(data?.detail) {
-        return data.detail;
+    // Procesamos cualquier campo que tenga errores
+    if(data && typeof data === 'object') {
+        const mensajes = [];
+
+        for(const campo in data) {
+            const errores = Array.isArray(data[campo]) ? data[campo] : [data[campo]];
+
+            for(const mensaje of errores) {
+                const mensajeFinal = traducirMensaje(mensaje);
+
+                // Los errores generales no necesitan el nombre del campo
+                if(campo === 'error' || campo === 'detail' || campo === 'non_field_errors') {
+                    mensajes.push(mensajeFinal);
+                }else {
+                    // Mostramos el nombre del campo y su error
+                    const nombreCampo = campo.replace(/_/g, ' ');
+                    mensajes.push(`${nombreCampo}: ${mensajeFinal}`);
+                }
+            }
+        }
+
+        if(mensajes.length > 0) {
+            return mensajes.join(' ');
+        }
     }
 
-    // Mostramos los errores personalizados de nuestro backend
-    if(data?.error) {
-        return data.error;
-    }
+    // Mensajes generales según el código HTTP
+    if(codigo === 400) return 'Los datos ingresados no son válidos.';
+    if(codigo === 401) return 'Debe iniciar sesión para continuar.';
+    if(codigo === 403) return 'No tiene permiso para realizar esta operación.';
+    if(codigo === 404) return 'No se encontró el registro solicitado.';
+    if(codigo === 409) return 'No se puede completar la operación porque existen registros relacionados.';
 
-    // Mostramos errores de campos o un mensaje general
-    return JSON.stringify(data) || `Error HTTP ${error.response.status}`;
+    return `Ocurrió un error al realizar la operación (${codigo}).`;
 }
