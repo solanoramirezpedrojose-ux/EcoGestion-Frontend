@@ -8,6 +8,7 @@ import Personas from './pages/Personas.jsx';
 import Inventario from './pages/Inventario.jsx';
 import Recolecciones from './pages/Recolecciones.jsx';
 import Ventas from './pages/Ventas.jsx';
+import Pagos from './pages/Pagos.jsx';
 
 // Componente temporal para los módulos todavía no implementados
 function ModuloPendiente({ nombre }) {
@@ -57,7 +58,8 @@ export default function App() {
                             <Route path="/recolecciones" element={<Recolecciones/>}/>
                             {/* Pantalla principal del módulo Ventas */}
                             <Route path="/ventas" element={<Ventas />} />
-                            <Route path="/pagos" element={<ModuloPendiente nombre="Pagos" />} />
+                            {/* Pantalla real del módulo Pagos */}
+                            <Route path="/pagos" element={<Pagos />} />
 
                         </Route>
                     </Route>
