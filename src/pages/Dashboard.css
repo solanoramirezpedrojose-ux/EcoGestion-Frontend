@@ -1,0 +1,34 @@
+/*Fondo y tamaño general del dashboard*/
+.ecog-dashboard {
+    min-height: 100vh;
+}
+
+/*Color principal del titulo*/
+.ecog-dashboard-title {
+    color: #278568;
+}
+
+/*Tarjetas de los indicadores*/
+.ecog-stat-card {
+    border: 1px solid #DFE6E1;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0, 5px 20px rgba(20, 61, 50, 0.06);
+    transition: transform 0.2s;
+}
+
+/*Efecto cuando pasamo el mouse sobre una tarjeta*/
+.ecog-stat-card:hover {
+    transform: translateY(-4px);
+}
+
+/*Iconos de los indicadores*/
+.ecog-stat-icon {
+    font-size: 32px;
+    color: #278568;
+}
+
+/*Collor de los numeros*/
+.ecog-stat-card h3 {
+    color: #143D32;
+}
