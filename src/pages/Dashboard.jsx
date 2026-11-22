@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from '../auth/AuthContext.jsx';
 import { getError } from "../api/client.js";
 import { obtenerIndicadores } from "../services/dashboardService";
@@ -7,9 +6,8 @@ import './Dashboard.css';
 
 //Componente principal del Dashboard
 export default function Dashboard() {
-    //Obtenemos el usuario y la funcion para cerrar sesion
-    const { username, logout } = useAuth();
-    const navigate = useNavigate();
+    //Obtenemos el usuario que inicio sesion 
+    const { username } = useAuth();
 
     //Estados para guardar los indicadores, carga y errores
     const [indicadores, setIndicadores] = useState(null);
@@ -46,11 +44,6 @@ export default function Dashboard() {
             activo = false;
         };
     }, []);
-    //Funcion para cerrar la sesion
-    function cerrarSesion() {
-        logout();
-        navigate('/login', { replace: true });
-    }
 
     //Datos que utilizaremos para las tarjetas
     const tarjetas = indicadores ? [
@@ -72,24 +65,7 @@ export default function Dashboard() {
     ] : [];
 
     return (
-        <main className="container py-5 ecog-dashboard">
-            {/*Encabezado del dashboard*/}
-            <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-                <div>
-                    <h1 className="fw-bold ecog-dashboard-title">
-                        <i className="bi bi-recycle me-2"/>
-                        EcoGestion
-                    </h1>
-                    <p className="text-secondary mb-0">
-                        Panel general del sistema
-                    </p>
-                </div>
-                {/*Boton para cerrar sesion*/}
-                <button className="btn btn-outline-danger" onClick={cerrarSesion}>
-                    <i className="bi bi-box-arrow-right me-2"/>
-                    Cerrar sesion
-                </button>
-            </div>
+        <div className="ecog-dashboard">
             {/*Mensaje de bienvenida*/}
             <div className="card border-0 shadow-sm mb-4">
                 <div className="card-body p-4">
@@ -127,6 +103,6 @@ export default function Dashboard() {
                     ))}
                 </div>
             )}
-        </main>
+        </div>
     );
 }

@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
     //Obtenemos el token y el usuario guardados en el navegador
     const [token, setToken] = useState(() => sessionStorage.getItem('ecogestion_token'));
-    const [username, setUsername] = useState(() => sessionStorage.getItem('ecogestion_token'));
+    const [username, setUsername] = useState(() => sessionStorage.getItem('ecogestion_username'));
 
     //Funcion para iniciar sesion
     async function login(usernameInput, password) {

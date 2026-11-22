@@ -1,0 +1,125 @@
+/*Estructura rpincipal del sistema*/
+.ecog-app-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F6F8F7;
+}
+
+/*Menu lateral*/
+.ecog-sidebar {
+    width: 250px;
+    background-color: #143D32;
+    color: white;
+    padding: 25px 15px;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+/*Nombre del sistema*/
+.ecog-sidebar-brand {
+    font-size: 23px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 35px;
+    color: #A8E8BC;
+}
+
+/*Etiqueta del menu*/
+.ecog-sidebar-label {
+    font-size: 12px;
+    color: #A8BEB5;
+    padding-left: 12px;
+    margin-bottom: 15px;
+}
+
+/*Enlaces del menu lateral*/
+.ecog-sidebar-link {
+    display: block;
+    padding: 13px 15px;
+    color: #D5EADF;
+    text-decoration: none;
+    border-radius: 9px;
+}
+
+/*Opcion seleccionada o al pasar el mouse*/
+.ecog-sidebar-link:hover,
+.ecog-sidebar-link.active {
+    background-color: #278568;
+    color: white;
+}
+
+/*Texto inferior del menu*/
+.ecog-sidebar-footer {
+    margin-top: auto;
+    padding: 15px;
+    font-size: 12px;
+    color: #A8BEB5;
+}
+
+/*Area principal de la aplicacion*/
+.ecog-app-main {
+    flex: 1;
+    min-width: 0;
+}
+
+/*Barra superior*/
+.ecog-topbar {
+    background-color: white;
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #DFE6E1;
+}
+
+/*Nombre de EcoGestion en la barra*/
+.ecog-topbar-title {
+    color: #143D32;
+}
+
+/*Nombre del usuari oconectado*/
+.ecog-username {
+    color: #278568;
+    font-weight: 500;
+}
+
+/*Espacio donde aparecen las paginas*/
+.ecog-page-content {
+    padding: 25px;
+}
+
+/*Menu para celulares*/
+.ecog-mobile-menu {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    overflow-x: auto;
+    background-color: white;
+}
+
+/*Enlaces del menu movil*/
+.ecog-mobile-link {
+    white-space: nowrap;
+    text-decoration: none;
+    color: #278568;
+    padding: 8px 12px;
+    border: 1px solid #DFE6E1;
+    border-radius: 8px;
+}
+
+/*Opcion activa en celular*/
+.ecog-mobile-link.active {
+    background-color: #278568;
+    color: white;
+}
+
+/*Ajustes para pantallas pequeñas*/
+@media (max-width: 767px) {
+    .ecog-topbar {
+        padding: 15px;
+    }
+    .ecog-page-content {
+        padding: 15px;
+    }
+}
