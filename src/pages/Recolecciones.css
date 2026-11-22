@@ -21,6 +21,7 @@
     padding: 10px 18px;
     border-radius: 8px;
 }
+
 .recolecciones-btn-nueva:hover {
     background-color: #E8F3ED;
     color: #143D32;
@@ -36,14 +37,17 @@
     border-radius: 12px;
     color: #143D32;
 }
+
 .recolecciones-resumen i {
     font-size: 35px;
     color: #278568;
 }
+
 .recolecciones-resumen span {
     font-size: 14px;
     color: #64756C;
 }
+
 .recolecciones-resumen h2 {
     font-weight: bold;
     margin: 5px 0 0;
@@ -64,6 +68,7 @@
     border-radius: 12px;
     overflow: hidden;
 }
+
 .recolecciones-tabla thead th {
     background-color: #E8F3ED;
     color: #143D32;
@@ -71,6 +76,7 @@
     font-weight: 600;
     white-space: nowrap;
 }
+
 .recolecciones-tabla tbody td {
     padding: 14px 15px;
     vertical-align: middle;
@@ -109,23 +115,29 @@
     .recolecciones-hero {
         padding: 20px;
     }
+
     .recolecciones-hero h1 {
         font-size: 23px;
     }
+
     .recolecciones-btn-nueva {
         width: 100%;
     }
+
     .recolecciones-resumen {
         padding: 20px;
     }
+
     .recolecciones-tabla .card-body {
         padding: 15px !important;
     }
+
     .recolecciones-paginacion {
         flex-direction: column;
         align-items: stretch;
         text-align: center;
     }
+
     .recolecciones-paginacion .d-flex {
         justify-content: center;
     }

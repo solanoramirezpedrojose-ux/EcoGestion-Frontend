@@ -15,7 +15,7 @@ function prepararFecha(fecha) {
 }
 
 // Formulario para registrar o editar ventas
-export default function FormVenta({venta, onGuardar, onCancelar}) {
+export default function FormVenta({ venta, onGuardar, onCancelar }) {
 
     // Guardamos los datos iniciales de la venta
     const [datos, setDatos] = useState({
@@ -43,18 +43,18 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
                 const lista = personas.filter(persona =>
                     persona.activo &&
                     (persona.tipo_persona === 'COMPRADOR' ||
-                     persona.tipo_persona === 'AMBOS')
+                        persona.tipo_persona === 'AMBOS')
                 );
 
-                if(vigente) {
+                if (vigente) {
                     setCompradores(lista);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(getError(err));
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargandoCompradores(false);
                 }
             }
@@ -69,7 +69,7 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
 
     // Actualizamos los datos cuando el usuario modifica un campo
     function cambiar(event) {
-        setDatos({...datos, [event.target.name]: event.target.value});
+        setDatos({ ...datos, [event.target.name]: event.target.value });
     }
 
     // Validamos y enviamos la información de la venta
@@ -78,13 +78,13 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
         setError('');
 
         // Verificamos que se haya seleccionado un comprador
-        if(!datos.comprador) {
+        if (!datos.comprador) {
             setError('Debe seleccionar un comprador.');
             return;
         }
 
         // Verificamos que la fecha sea válida
-        if(!datos.fecha || isNaN(new Date(datos.fecha).getTime())) {
+        if (!datos.fecha || isNaN(new Date(datos.fecha).getTime())) {
             setError('Debe ingresar una fecha válida.');
             return;
         }
@@ -100,10 +100,10 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
 
             // Enviamos los datos al componente principal de Ventas
             await onGuardar(ventaGuardar);
-        }catch(err) {
+        } catch (err) {
             // Mostramos los errores devueltos por Django
             setError(err.response ? getError(err) : err.message);
-        }finally {
+        } finally {
             setGuardando(false);
         }
     }
@@ -113,8 +113,8 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
             <div className="card-body p-4">
 
                 {/* Encabezado del formulario */}
-                <h2 className="h5 fw-bold mb-2" style={{color: '#143D32'}}>
-                    <i className="bi bi-cart-check me-2"/>
+                <h2 className="h5 fw-bold mb-2" style={{ color: '#143D32' }}>
+                    <i className="bi bi-cart-check me-2" />
                     {venta ? 'Editar venta' : 'Registrar nueva venta'}
                 </h2>
 
@@ -166,14 +166,14 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
                             </label>
 
                             <input id="venta-fecha" name="fecha" type="datetime-local"
-                                className="form-control" value={datos.fecha} onChange={cambiar} required/>
+                                className="form-control" value={datos.fecha} onChange={cambiar} required />
                         </div>
 
                         {/* Información sobre el estado inicial */}
                         {!venta && (
                             <div className="col-12">
                                 <div className="alert alert-info mb-0">
-                                    <i className="bi bi-info-circle me-2"/>
+                                    <i className="bi bi-info-circle me-2" />
                                     La venta se registrará como <strong>PENDIENTE</strong>.
                                     Después podrá agregar materiales y confirmarla.
                                 </div>
@@ -195,7 +195,7 @@ export default function FormVenta({venta, onGuardar, onCancelar}) {
                         {/* Botones para guardar o cancelar */}
                         <div className="col-12 d-flex flex-wrap gap-2 mt-4">
                             <button type="submit" className="btn btn-success" disabled={guardando || cargandoCompradores || compradores.length === 0}>
-                                <i className="bi bi-check-lg me-2"/>
+                                <i className="bi bi-check-lg me-2" />
                                 {guardando ? 'Guardando...' : 'Guardar venta'}
                             </button>
 

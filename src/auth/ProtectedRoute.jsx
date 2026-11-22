@@ -7,5 +7,5 @@ export default function ProtectedRoute() {
     const { isAuthenticated } = useAuth();
 
     //Si tiene sesion mostrmos la pagina, si no lo enviamos al login
-    return isAuthenticated ? <Outlet/> : <Navigate to="/login" replace/>;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }

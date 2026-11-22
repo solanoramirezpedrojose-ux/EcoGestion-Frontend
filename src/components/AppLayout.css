@@ -34,9 +34,11 @@
     text-decoration: none;
     white-space: nowrap;
 }
+
 .eco-marca:hover {
     color: #C5E8D5;
 }
+
 .eco-logo {
     font-size: 26px;
     color: #A5DEC0;
@@ -68,6 +70,7 @@
     white-space: nowrap;
     transition: background-color 0.2s;
 }
+
 .eco-enlace:hover {
     background-color: #285749;
     color: white;
@@ -87,6 +90,7 @@
     gap: 14px;
     flex-shrink: 0;
 }
+
 .eco-perfil {
     display: flex;
     align-items: center;
@@ -94,9 +98,11 @@
     color: white;
     font-size: 13px;
 }
+
 .eco-perfil i {
     font-size: 20px;
 }
+
 .eco-perfil span {
     max-width: 110px;
     overflow: hidden;
@@ -117,6 +123,7 @@
     cursor: pointer;
     font-size: 13px;
 }
+
 .eco-salir:hover {
     background-color: #285749;
 }
@@ -129,19 +136,23 @@
 
 /* Diseño adaptable para tablets y celulares */
 @media (max-width: 1000px) {
+
     /* La navegación pasa a una segunda fila */
     .eco-topbar-contenido {
         flex-wrap: wrap;
         gap: 12px;
         padding: 12px 16px;
     }
+
     .eco-marca {
         order: 1;
     }
+
     .eco-usuario {
         order: 2;
         margin-left: auto;
     }
+
     .eco-navegacion {
         order: 3;
         flex-basis: 100%;
@@ -149,6 +160,7 @@
         padding-bottom: 4px;
         justify-content: flex-start;
     }
+
     .eco-contenido {
         padding: 20px 16px;
     }
@@ -186,19 +198,24 @@
     .eco-marca {
         font-size: 18px;
     }
+
     .eco-logo {
         font-size: 23px;
     }
+
     .eco-perfil span {
         max-width: 75px;
     }
+
     .eco-usuario {
         gap: 8px;
     }
+
     .eco-enlace {
         padding: 9px 11px;
         font-size: 12px;
     }
+
     .eco-salir {
         padding: 8px 10px;
     }

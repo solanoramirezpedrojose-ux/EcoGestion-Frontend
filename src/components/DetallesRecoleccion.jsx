@@ -5,10 +5,10 @@ import { listDetallesRecoleccion, addDetalleRecoleccion, updateDetalleRecoleccio
 import { useAuth } from '../auth/AuthContext.jsx';
 
 // Componente para administrar los materiales de una recolección
-export default function DetallesRecoleccion({recoleccion}) {
+export default function DetallesRecoleccion({ recoleccion }) {
     //Consultamos los permisos de usuario
     const { tienePermiso } = useAuth();
-    
+
     // Estados para almacenar materiales y detalles
     const [detalles, setDetalles] = useState([]);
     const [materiales, setMateriales] = useState([]);
@@ -40,24 +40,24 @@ export default function DetallesRecoleccion({recoleccion}) {
                 let pagina = 1;
                 let continuar = true;
 
-                while(continuar) {
-                    const datos = await listMateriales({page: pagina});
+                while (continuar) {
+                    const datos = await listMateriales({ page: pagina });
                     listaMateriales = [...listaMateriales, ...datos.results];
 
                     continuar = Boolean(datos.next);
                     pagina++;
                 }
 
-                if(vigente) {
+                if (vigente) {
                     setDetalles(listaDetalles);
                     setMateriales(listaMateriales);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -111,12 +111,12 @@ export default function DetallesRecoleccion({recoleccion}) {
         setMensaje('');
 
         // Validamos el material y la cantidad
-        if(!materialId) {
+        if (!materialId) {
             setError('Debe seleccionar un material.');
             return;
         }
 
-        if(!cantidad || !Number.isFinite(Number(cantidad)) || Number(cantidad) <= 0) {
+        if (!cantidad || !Number.isFinite(Number(cantidad)) || Number(cantidad) <= 0) {
             setError('La cantidad debe ser mayor que cero.');
             return;
         }
@@ -131,11 +131,11 @@ export default function DetallesRecoleccion({recoleccion}) {
         setGuardando(true);
 
         try {
-            if(detalleEditando) {
+            if (detalleEditando) {
                 // Actualizamos un detalle existente
                 await updateDetalleRecoleccion(detalleEditando.id, datos);
                 setMensaje('Material actualizado correctamente.');
-            }else {
+            } else {
                 // Agregamos un material a la recolección
                 await addDetalleRecoleccion(datos);
                 setMensaje('Material agregado correctamente.');
@@ -143,16 +143,16 @@ export default function DetallesRecoleccion({recoleccion}) {
 
             cancelarFormulario();
             setRecargar(valor => valor + 1);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
-        }finally {
+        } finally {
             setGuardando(false);
         }
     }
 
     // Eliminamos un material de la recolección
     async function eliminarDetalle(id) {
-        if(!window.confirm('¿Desea eliminar este material de la recolección?')) {
+        if (!window.confirm('¿Desea eliminar este material de la recolección?')) {
             return;
         }
 
@@ -164,7 +164,7 @@ export default function DetallesRecoleccion({recoleccion}) {
 
             setMensaje('Material eliminado correctamente.');
             setRecargar(valor => valor + 1);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -182,14 +182,14 @@ export default function DetallesRecoleccion({recoleccion}) {
             {/* Encabezado de los materiales */}
             <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <h3 className="h6 fw-bold mb-0">
-                    <i className="bi bi-recycle me-2"/>
+                    <i className="bi bi-recycle me-2" />
                     Materiales de la recolección
                 </h3>
 
                 {/* Solo agregamos materiales con el permiso correspondiente */}
                 {pendiente && tienePermiso('recolecciones.add_detallerecoleccion') && (
                     <button type="button" className="btn btn-success btn-sm" onClick={nuevoDetalle}>
-                        <i className="bi bi-plus-lg me-2"/>
+                        <i className="bi bi-plus-lg me-2" />
                         Agregar material
                     </button>
                 )}
@@ -230,13 +230,13 @@ export default function DetallesRecoleccion({recoleccion}) {
                             {/* Cantidad en kilogramos */}
                             <div className="col-md-6">
                                 <label htmlFor="detalle-cantidad" className="form-label">Cantidad (kg)</label>
-                                <input id="detalle-cantidad" type="number" className="form-control" min="0.01" step="0.01" placeholder="Ejemplo: 10.50" value={cantidad} onChange={event => setCantidad(event.target.value)} required/>
+                                <input id="detalle-cantidad" type="number" className="form-control" min="0.01" step="0.01" placeholder="Ejemplo: 10.50" value={cantidad} onChange={event => setCantidad(event.target.value)} required />
                             </div>
 
                             {/* Botones del formulario */}
                             <div className="col-12 d-flex gap-2">
                                 <button type="submit" className="btn btn-success" disabled={guardando}>
-                                    <i className="bi bi-check-lg me-2"/>
+                                    <i className="bi bi-check-lg me-2" />
                                     {guardando ? 'Guardando...' : 'Guardar material'}
                                 </button>
                                 <button type="button" className="btn btn-outline-secondary" onClick={cancelarFormulario} disabled={guardando}>
@@ -282,14 +282,14 @@ export default function DetallesRecoleccion({recoleccion}) {
                                                 {/* Editar material */}
                                                 {tienePermiso('recolecciones.change_detallerecoleccion') && (
                                                     <button type="button" className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarDetalle(detalle)}>
-                                                        <i className="bi bi-pencil"/>
+                                                        <i className="bi bi-pencil" />
                                                     </button>
                                                 )}
 
                                                 {/* Eliminar material */}
                                                 {tienePermiso('recolecciones.delete_detallerecoleccion') && (
                                                     <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarDetalle(detalle.id)}>
-                                                        <i className="bi bi-trash"/>
+                                                        <i className="bi bi-trash" />
                                                     </button>
                                                 )}
 

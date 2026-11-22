@@ -24,15 +24,15 @@ export default function Personas() {
             try {
                 const datos = await listPersonas();
                 setPersonas(datos);
-            }catch(err) {
+            } catch (err) {
                 setError(getError(err));
-            }finally {
+            } finally {
                 setCargando(false);
             }
         }
         cargar();
     }, []);
-   
+
     //Abrimos el formulario para registrar una persona
     function nuevaPersona() {
         setPersonaEditando(null);
@@ -50,7 +50,7 @@ export default function Personas() {
             setPersonaEditando(datos);
             setPersonaDetalle(null);
             setMostrarFormulario(true);
-        }catch(err) {
+        } catch (err) {
             setError(getError(err));
         }
     }
@@ -62,18 +62,18 @@ export default function Personas() {
             const datos = await getPersona(id);
             setPersonaDetalle(datos);
             setMostrarFormulario(false);
-        }catch(err) {
+        } catch (err) {
             setError(getError(err))
         }
     }
 
     //Guardamos los datos nuevos o modificamos en Django
     async function guardarPersona(datos) {
-        if(personaEditando) {
+        if (personaEditando) {
             // Actualizamos una persona existente
             await updatePersona(personaEditando.id, datos);
             setMensaje('Persona actualizada correctamente');
-        }else {
+        } else {
             // Registramos una nueva persona
             await addPersona(datos);
             setMensaje('Persona registrada correctamente');
@@ -92,7 +92,7 @@ export default function Personas() {
     async function eliminarPersona(id) {
         const confirmar = window.confirm('¿Está seguro de que desea eliminar esta persona?');
 
-        if(!confirmar) {
+        if (!confirmar) {
             return;
         }
 
@@ -108,7 +108,7 @@ export default function Personas() {
             setPersonas(datos);
             setPersonaDetalle(null);
             setMensaje('Persona eliminada correctamente');
-        }catch(err) {
+        } catch (err) {
             // Django puede rechazar el borrado por permisos o relaciones
             setError(getError(err));
         }
@@ -124,7 +124,7 @@ export default function Personas() {
             <div className="personas-hero">
                 <div>
                     <h1 className="h3 fw-bold mb-2">
-                        <i className="bi bi-people me-2"/>
+                        <i className="bi bi-people me-2" />
                         Gestión de personas
                     </h1>
                     <p className="mb-0">
@@ -132,20 +132,20 @@ export default function Personas() {
                     </p>
                 </div>
 
-            {/* Mostramos el botón solo si tiene permiso para registrar */}
-            {tienePermiso('personas.add_persona') && (
-                <button className="btn personas-btn-nueva" onClick={nuevaPersona}>
-                    <i className="bi bi-plus-lg me-2"/>
-                    Nueva persona
-                </button>
-            )}
+                {/* Mostramos el botón solo si tiene permiso para registrar */}
+                {tienePermiso('personas.add_persona') && (
+                    <button className="btn personas-btn-nueva" onClick={nuevaPersona}>
+                        <i className="bi bi-plus-lg me-2" />
+                        Nueva persona
+                    </button>
+                )}
             </div>
 
             {/* Indicadores calculados a partir de la API */}
             <div className="row g-3 mb-4">
                 <div className="col-md-6">
                     <div className="personas-resumen">
-                        <i className="bi bi-people"/>
+                        <i className="bi bi-people" />
                         <div>
                             <span>Personas registradas</span>
                             <h2>{cargando ? '...' : personas.length}</h2>
@@ -155,7 +155,7 @@ export default function Personas() {
 
                 <div className="col-md-6">
                     <div className="personas-resumen">
-                        <i className="bi bi-person-check"/>
+                        <i className="bi bi-person-check" />
                         <div>
                             <span>Personas activas</span>
                             <h2>{cargando ? '...' : totalActivas}</h2>
@@ -179,7 +179,7 @@ export default function Personas() {
 
             {/* Formulario para registrar o editar */}
             {mostrarFormulario && (
-                <FormPersona key={personaEditando?.id ?? 'nueva'} persona={personaEditando} onGuardar={guardarPersona} onCancelar={() => setMostrarFormulario(false)}/>
+                <FormPersona key={personaEditando?.id ?? 'nueva'} persona={personaEditando} onGuardar={guardarPersona} onCancelar={() => setMostrarFormulario(false)} />
             )}
 
             {/* Información de una persona seleccionada */}
@@ -188,7 +188,7 @@ export default function Personas() {
                     <div className="card-body p-4">
                         <div className="d-flex justify-content-between">
                             <h2 className="h5">Detalle de persona</h2>
-                            <button className="btn-close" onClick={() => setPersonaDetalle(null)} aria-label="Cerrar detalle"/>
+                            <button className="btn-close" onClick={() => setPersonaDetalle(null)} aria-label="Cerrar detalle" />
                         </div>
 
                         <p><strong>Nombre:</strong> {personaDetalle.nombre}</p>
@@ -250,18 +250,18 @@ export default function Personas() {
                                             <td>
                                                 <div className="d-flex gap-2">
                                                     <button className="btn btn-sm btn-outline-success" title="Ver detalle" onClick={() => verPersona(persona.id)}>
-                                                        <i className="bi bi-eye"/>
+                                                        <i className="bi bi-eye" />
                                                     </button>
                                                     {/* Botón disponible únicamente para usuarios con permiso de edición */}
                                                     {tienePermiso('personas.change_persona') && (
                                                         <button className="btn btn-sm btn-outline-primary" title="Editar persona" onClick={() => editarPersona(persona.id)}>
-                                                            <i className="bi bi-pencil"/>
+                                                            <i className="bi bi-pencil" />
                                                         </button>
                                                     )}
                                                     {/* Botón disponible únicamente para usuarios con permiso de eliminación */}
                                                     {tienePermiso('personas.delete_persona') && (
                                                         <button className="btn btn-sm btn-outline-danger" title="Eliminar persona" onClick={() => eliminarPersona(persona.id)}>
-                                                            <i className="bi bi-trash"/>
+                                                            <i className="bi bi-trash" />
                                                         </button>
                                                     )}
                                                 </div>

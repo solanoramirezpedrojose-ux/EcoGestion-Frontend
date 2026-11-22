@@ -3,7 +3,7 @@ import { api } from "../api/client.js";
 //Consultamos todas las personas registradas en django
 export async function listPersonas() {
     const { data } = await api.get('/personas/');
-    if(Array.isArray) {
+    if (Array.isArray) {
         return data;
     }
     throw new Error('La API no devolvio una lista de personas');

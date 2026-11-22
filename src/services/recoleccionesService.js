@@ -2,10 +2,10 @@ import { api } from '../api/client.js'
 
 //Consultamos las recolecciones con filtros y paginacion
 export async function listRecolecciones(filtros = {}) {
-    const { data } = await api.get('/recolecciones/', { params: filtros});
+    const { data } = await api.get('/recolecciones/', { params: filtros });
 
     //Django devuelve los registros paginados
-    if(Array.isArray(data?.results)) {
+    if (Array.isArray(data?.results)) {
         return data;
     }
     throw new Error('La API no devolvio un lista de recolecciones')
@@ -49,10 +49,10 @@ export async function cancelarRecoleccion(id) {
 //Detalles de recoleccion: cada detalle representa un material y su cantidad
 //Consultamos los materiales de una recoleccion
 export async function listDetallesRecoleccion(recoleccionId) {
-    const { data } = await api.get('/recolecciones/detalles/', { params: { recoleccion: recoleccionId }});
+    const { data } = await api.get('/recolecciones/detalles/', { params: { recoleccion: recoleccionId } });
 
     //Los detalles de devuelven como una lista normal
-    if(Array.isArray(data)) {
+    if (Array.isArray(data)) {
         return data;
     }
     throw new Error('La API no devolvio los detalles de la recoleccion');

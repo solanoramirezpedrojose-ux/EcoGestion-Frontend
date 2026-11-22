@@ -2,13 +2,13 @@ import { api } from '../api/client.js';
 
 // Consultamos los pagos registrados con sus filtros
 export async function listPagos(filtros = {}) {
-    const { data } = await api.get('/pagos/', {params: filtros});
+    const { data } = await api.get('/pagos/', { params: filtros });
 
     // Django devuelve los pagos como una lista normal
-    if(Array.isArray(data)) {
+    if (Array.isArray(data)) {
         return data;
     }
-    throw new Error('La API no devolvió una lista de pagos.');
+    throw new Error('La API no devolvió una lista de pagos');
 }
 
 // Consultamos un pago por su ID

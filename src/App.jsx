@@ -39,23 +39,23 @@ export default function App() {
             <BrowserRouter>
                 <Routes>
                     {/* Pantalla pública de login */}
-                    <Route path="/login" element={<LoginRoute/>}/>
+                    <Route path="/login" element={<LoginRoute />} />
 
                     {/* Rutas privadas del sistema */}
-                    <Route element={<ProtectedRoute/>}>
+                    <Route element={<ProtectedRoute />}>
 
                         {/* Menú y barra superior compartidos */}
-                        <Route element={<AppLayout/>}>
+                        <Route element={<AppLayout />}>
 
-                            <Route path="/dashboard" element={<Dashboard/>}/>
+                            <Route path="/dashboard" element={<Dashboard />} />
 
                             {/* Estas pantallas se reemplazarán por los módulos reales */}
                             {/* Pantalla real del módulo Personas */}
-                            <Route path="/personas" element={<Personas/>}/>
+                            <Route path="/personas" element={<Personas />} />
                             {/* Pantalla real del módulo Inventario */}
-                            <Route path="/inventario" element={<Inventario/>}/>
+                            <Route path="/inventario" element={<Inventario />} />
                             {/* Pantalla real del módulo Recolecciones */}
-                            <Route path="/recolecciones" element={<Recolecciones/>}/>
+                            <Route path="/recolecciones" element={<Recolecciones />} />
                             {/* Pantalla principal del módulo Ventas */}
                             <Route path="/ventas" element={<Ventas />} />
                             {/* Pantalla real del módulo Pagos */}

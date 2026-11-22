@@ -22,7 +22,7 @@ export default function FormPersona({ persona, onGuardar, onCancelar }) {
 
     //Actualizamos el campo que modifica el usuario
     function cambiar(event) {
-        setDatos({...datos, [event.target.name]: event.target.value});
+        setDatos({ ...datos, [event.target.name]: event.target.value });
     }
 
     //Enviamos los datos del formulario
@@ -44,14 +44,14 @@ export default function FormPersona({ persona, onGuardar, onCancelar }) {
         try {
             //El componente Personas realizara la solicitud a Django
             await onGuardar(datos);
-        }catch(err) {
+        } catch (err) {
             //Mostramos los errores que devuelve la API
             setError(getError(err));
-        }finally {
+        } finally {
             setGuardando(false);
         }
     }
-    return(
+    return (
         <div className="card border-0 shadow-sm mb-4">
             <div className="card-body p-4">
                 {/*Titulo segun la operacion*/}

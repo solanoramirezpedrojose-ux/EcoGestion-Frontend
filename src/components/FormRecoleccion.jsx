@@ -14,7 +14,7 @@ function prepararFecha(fecha) {
 }
 
 // Formulario para registrar o editar recolecciones
-export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
+export default function FormRecoleccion({ recoleccion, onGuardar, onCancelar }) {
 
     // Guardamos los datos iniciales del formulario
     const [datos, setDatos] = useState({
@@ -45,20 +45,20 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
                 const lista = personas.filter(persona =>
                     persona.activo &&
                     (persona.tipo_persona === 'PROVEEDOR' ||
-                     persona.tipo_persona === 'AMBOS')
+                        persona.tipo_persona === 'AMBOS')
                 );
 
-                if(vigente) {
+                if (vigente) {
                     setProveedores(lista);
                 }
 
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(getError(err));
                 }
 
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargandoProveedores(false);
                 }
             }
@@ -66,7 +66,7 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
 
         cargarProveedores();
 
-        return() => {
+        return () => {
             vigente = false;
         };
 
@@ -74,7 +74,7 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
 
     // Actualizamos el campo que modifica el usuario
     function cambiar(event) {
-        setDatos({...datos, [event.target.name]: event.target.value});
+        setDatos({ ...datos, [event.target.name]: event.target.value });
     }
 
     // Validamos y enviamos los datos del formulario
@@ -83,13 +83,13 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
         setError('');
 
         // Verificamos que se haya seleccionado un proveedor
-        if(!datos.proveedor) {
+        if (!datos.proveedor) {
             setError('Debe seleccionar un proveedor');
             return;
         }
 
         // Verificamos que exista una fecha válida
-        if(!datos.fecha || isNaN(new Date(datos.fecha).getTime())) {
+        if (!datos.fecha || isNaN(new Date(datos.fecha).getTime())) {
             setError('Debe ingresar una fecha válida');
             return;
         }
@@ -107,11 +107,11 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
             // El componente principal realizará la solicitud a la API
             await onGuardar(recoleccionGuardar);
 
-        }catch(err) {
+        } catch (err) {
             // Mostramos los errores enviados por Django
             setError(err.response ? getError(err) : err.message);
 
-        }finally {
+        } finally {
             setGuardando(false);
         }
     }
@@ -123,7 +123,7 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
 
                 {/* Encabezado del formulario */}
                 <h2 className="h5 fw-bold mb-2" style={{ color: '#143D32' }}>
-                    <i className="bi bi-truck me-2"/>
+                    <i className="bi bi-truck me-2" />
                     {recoleccion ? 'Editar recolección' : 'Registrar nueva recolección'}
                 </h2>
 
@@ -166,10 +166,10 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
 
                             {/* Avisamos si no existen proveedores disponibles */}
                             {!cargandoProveedores && proveedores.length === 0 && !error && (
-                                    <small className="text-warning">
-                                        No hay proveedores activos disponibles.
-                                    </small>
-                                )}
+                                <small className="text-warning">
+                                    No hay proveedores activos disponibles.
+                                </small>
+                            )}
                         </div>
 
                         {/* Fecha y hora */}
@@ -213,7 +213,7 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
                         {!recoleccion && (
                             <div className="col-12">
                                 <div className="alert alert-info mb-0">
-                                    <i className="bi bi-info-circle me-2"/>
+                                    <i className="bi bi-info-circle me-2" />
                                     La recolección se registrará como
                                     <strong> PENDIENTE</strong>.
                                     Después podrá agregar materiales y confirmarla.
@@ -230,7 +230,7 @@ export default function FormRecoleccion({recoleccion, onGuardar, onCancelar}) {
                                     proveedores.length === 0
                                 }
                             >
-                                <i className="bi bi-check-lg me-2"/>
+                                <i className="bi bi-check-lg me-2" />
                                 {guardando ? 'Guardando...' : 'Guardar recolección'}
                             </button>
 

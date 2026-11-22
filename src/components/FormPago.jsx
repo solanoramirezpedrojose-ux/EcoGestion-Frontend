@@ -14,7 +14,7 @@ function prepararFecha(fecha) {
 }
 
 // Formulario para registrar o editar pagos
-export default function FormPago({pago, onGuardar, onCancelar}) {
+export default function FormPago({ pago, onGuardar, onCancelar }) {
     // Guardamos los datos iniciales del formulario
     const [datos, setDatos] = useState({
         venta: pago?.venta ? String(pago.venta) : '',
@@ -41,16 +41,16 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
                 const listaVentas = await listVentas();
                 const listaPagos = await listPagos();
 
-                if(vigente) {
+                if (vigente) {
                     setVentas(listaVentas);
                     setPagos(listaPagos);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -85,7 +85,7 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
         let totalPagado = 0;
 
         pagos.forEach(item => {
-            if(Number(item.venta) === Number(ventaId)) {
+            if (Number(item.venta) === Number(ventaId)) {
                 totalPagado += Number(item.monto);
             }
         });
@@ -119,7 +119,7 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
 
     // Actualizamos los datos al modificar los campos
     function cambiar(event) {
-        setDatos({...datos, [event.target.name]: event.target.value});
+        setDatos({ ...datos, [event.target.name]: event.target.value });
     }
 
     // Validamos y enviamos los datos del pago
@@ -128,25 +128,25 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
         setError('');
 
         // Verificamos que se haya seleccionado una venta confirmada
-        if(!ventaSeleccionada || ventaSeleccionada.estado !== 'CONFIRMADA') {
+        if (!ventaSeleccionada || ventaSeleccionada.estado !== 'CONFIRMADA') {
             setError('Debe seleccionar una venta confirmada.');
             return;
         }
 
         // Validamos que el monto sea mayor que cero
-        if(!datos.monto || !Number.isFinite(Number(datos.monto)) || Number(datos.monto) <= 0) {
+        if (!datos.monto || !Number.isFinite(Number(datos.monto)) || Number(datos.monto) <= 0) {
             setError('El monto del pago debe ser mayor que cero.');
             return;
         }
 
         // Verificamos que el pago no supere el saldo disponible
-        if(Number(datos.monto) > saldoDisponible + 0.001) {
+        if (Number(datos.monto) > saldoDisponible + 0.001) {
             setError('El monto supera el saldo disponible de la venta.');
             return;
         }
 
         // Verificamos que la fecha sea válida
-        if(!datos.fecha_pago || isNaN(new Date(datos.fecha_pago).getTime())) {
+        if (!datos.fecha_pago || isNaN(new Date(datos.fecha_pago).getTime())) {
             setError('Debe ingresar una fecha válida.');
             return;
         }
@@ -166,9 +166,9 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
             // El componente principal realizará la petición a Django
             await onGuardar(pagoGuardar);
 
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
-        }finally {
+        } finally {
             setGuardando(false);
         }
     }
@@ -178,8 +178,8 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
             <div className="card-body p-4">
 
                 {/* Encabezado del formulario */}
-                <h2 className="h5 fw-bold mb-2" style={{color: '#143D32'}}>
-                    <i className="bi bi-cash-coin me-2"/>
+                <h2 className="h5 fw-bold mb-2" style={{ color: '#143D32' }}>
+                    <i className="bi bi-cash-coin me-2" />
                     {pago ? 'Editar pago' : 'Registrar nuevo pago'}
                 </h2>
 
@@ -200,7 +200,7 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
                             <label htmlFor="pago-venta" className="form-label">Venta</label>
 
                             <select id="pago-venta" name="venta" className="form-select" value={datos.venta}
-                                onChange={event => setDatos({...datos, venta: event.target.value, monto: ''})}
+                                onChange={event => setDatos({ ...datos, venta: event.target.value, monto: '' })}
                                 disabled={cargando || Boolean(pago)} required>
                                 <option value="">
                                     {cargando ? 'Cargando ventas...' : 'Seleccione una venta confirmada'}
@@ -235,11 +235,11 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
                                 <span className="input-group-text">₡</span>
                                 <input id="pago-monto" name="monto" type="number" className="form-control"
                                     min="0.01" step="0.01" placeholder="0.00"
-                                    value={datos.monto} onChange={cambiar} required/>
+                                    value={datos.monto} onChange={cambiar} required />
                             </div>
                         </div>
 
-                        
+
                         {/* Mostramos los saldos de la venta seleccionada */}
                         {ventaSeleccionada && (
                             <div className="col-12">
@@ -290,7 +290,7 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
 
                             <input id="pago-referencia" name="referencia" type="text" className="form-control"
                                 maxLength={100} placeholder="Número de referencia (opcional)"
-                                value={datos.referencia} onChange={cambiar}/>
+                                value={datos.referencia} onChange={cambiar} />
 
                             <small className="text-secondary">
                                 Campo opcional.
@@ -302,14 +302,14 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
                             <label htmlFor="pago-fecha" className="form-label">Fecha y hora</label>
 
                             <input id="pago-fecha" name="fecha_pago" type="datetime-local" className="form-control"
-                                value={datos.fecha_pago} onChange={cambiar} required/>
+                                value={datos.fecha_pago} onChange={cambiar} required />
                         </div>
 
                         {/* Información para el registro */}
                         {!pago && (
                             <div className="col-12">
                                 <div className="alert alert-info mb-0">
-                                    <i className="bi bi-info-circle me-2"/>
+                                    <i className="bi bi-info-circle me-2" />
                                     Solo se pueden registrar pagos de ventas confirmadas.
                                     El monto no puede superar el saldo pendiente.
                                 </div>
@@ -319,7 +319,7 @@ export default function FormPago({pago, onGuardar, onCancelar}) {
                         {/* Botones del formulario */}
                         <div className="col-12 d-flex flex-wrap gap-2 mt-4">
                             <button type="submit" className="btn btn-success" disabled={guardando || cargando || ventasDisponibles.length === 0}>
-                                <i className="bi bi-check-lg me-2"/>
+                                <i className="bi bi-check-lg me-2" />
                                 {guardando ? 'Guardando...' : 'Guardar pago'}
                             </button>
 

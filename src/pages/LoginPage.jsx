@@ -32,33 +32,33 @@ export default function LoginPage() {
 
             //Si el login funciona ingresamos al sistema
             navigate('/', { replace: true });
-        }catch(err){
+        } catch (err) {
             //Mostramos el mensaje si ocurre un error
-            if(err.response?.status === 400) {
+            if (err.response?.status === 400) {
                 setError('Usuario o contraseña incorrectos');
-            }else {
+            } else {
                 setError('No se pudo iniciar sesion. Intente de nuevo')
             }
-        }finally{
+        } finally {
             //Finalizamos el estado de carga
             setLoading(false);
         }
     }
 
-    return(
+    return (
         <main className="ecog-login">
             <div className="ecog-login-container">
                 {/*Panel izquierdo con la identidad de EcoGestion*/}
                 <section className="ecog-login-aside">
                     <div className="ecog-login-brand">
-                        <i className="bi bi-recycle"/>
+                        <i className="bi bi-recycle" />
                     </div>
                     <h1>EcoGestion</h1>
                     <p>Una manera inteligente de gestionar
                         nuestros recursos
                     </p>
                     <div className="ecog-login-footer">
-                        <i className="bi bi-leaf me-2"/>
+                        <i className="bi bi-leaf me-2" />
                         Gestion sostenible
                     </div>
                 </section>
@@ -75,7 +75,7 @@ export default function LoginPage() {
                         {/*Alerta cuando ocurra un error*/}
                         {error && (
                             <div className="alert alert-danger" role="alert">
-                                <i className="bi bi-exclamation-circle me-2"/>
+                                <i className="bi bi-exclamation-circle me-2" />
                                 {error}
                             </div>
                         )}
@@ -88,7 +88,7 @@ export default function LoginPage() {
                                 </label>
                                 <div className="input-group">
                                     <span className="input-group-text">
-                                        <i className="bi bi-person"/>
+                                        <i className="bi bi-person" />
                                     </span>
                                     <input
                                         id="username"
@@ -108,7 +108,7 @@ export default function LoginPage() {
                                 </label>
                                 <div className="input-group">
                                     <span className="input-group-text">
-                                        <i className="bi bi-lock"/>
+                                        <i className="bi bi-lock" />
                                     </span>
                                     <input
                                         id="password"
@@ -125,7 +125,7 @@ export default function LoginPage() {
                             {/*Boton para iniciar sesion*/}
                             <button type="submit" className="btn ecog-login-button w-100" disabled={loading}>
                                 {loading ? 'Verificando...' : 'Ingresar'}
-                                {!loading && (<i className="bi bi-arrow-right ms-2"/>)}
+                                {!loading && (<i className="bi bi-arrow-right ms-2" />)}
                             </button>
                         </form>
                         <p className="ecog-login-note">

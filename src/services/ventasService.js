@@ -2,10 +2,10 @@ import { api } from '../api/client.js';
 
 // Consultamos las ventas registradas con sus filtros
 export async function listVentas(filtros = {}) {
-    const { data } = await api.get('/ventas/', {params: filtros});
+    const { data } = await api.get('/ventas/', { params: filtros });
 
     // Django devuelve las ventas como una lista normal
-    if(Array.isArray(data)) {
+    if (Array.isArray(data)) {
         return data;
     }
     throw new Error('La API no devolvió una lista de ventas');
@@ -50,9 +50,9 @@ export async function anularVenta(id) {
 // Cada detalle contiene material, cantidad y precio
 // Consultamos los materiales de una venta
 export async function listDetallesVenta(ventaId) {
-    const { data } = await api.get('/ventas/detalles/', { params: {venta: ventaId} });
+    const { data } = await api.get('/ventas/detalles/', { params: { venta: ventaId } });
 
-    if(Array.isArray(data)) {
+    if (Array.isArray(data)) {
         return data;
     }
     throw new Error('La API no devolvió los detalles de la venta.');

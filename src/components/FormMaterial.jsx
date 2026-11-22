@@ -20,7 +20,7 @@ export default function FormMaterial({ material, onGuardar, onCancelar }) {
 
     // Actualizamos los campos cuando el usuario escribe
     function cambiar(event) {
-        setDatos({...datos, [event.target.name]: event.target.value});
+        setDatos({ ...datos, [event.target.name]: event.target.value });
     }
 
     // Función para enviar el formulario
@@ -33,7 +33,7 @@ export default function FormMaterial({ material, onGuardar, onCancelar }) {
         setError('');
 
         // Validamos que el nombre no esté vacío
-        if(!datos.nombre.trim()) {
+        if (!datos.nombre.trim()) {
             setError('Debe ingresar el nombre del material');
             return;
         }
@@ -50,7 +50,7 @@ export default function FormMaterial({ material, onGuardar, onCancelar }) {
             // Enviamos los datos al componente de Inventario
             // Ese componente realizará la petición a Django
             await onGuardar(datos);
-        }catch(err) {
+        } catch (err) {
             // Mostramos el error si Django rechaza los datos
             setError(err.response ? getError(err) : err.message);
         } finally {
@@ -58,13 +58,13 @@ export default function FormMaterial({ material, onGuardar, onCancelar }) {
             setGuardando(false);
         }
     }
-    return(
+    return (
         <div className="card border-0 shadow-sm mb-4">
             <div className="card-body p-4">
 
                 {/* Título según la operación */}
                 <h2 className="h5 fw-bold mb-3" style={{ color: '#143D32' }}>
-                    <i className="bi bi-box-seam me-2"/>
+                    <i className="bi bi-box-seam me-2" />
                     {material ? 'Editar material' : 'Registrar nuevo material'}
                 </h2>
 
@@ -176,7 +176,7 @@ export default function FormMaterial({ material, onGuardar, onCancelar }) {
                         {/* Botones para guardar o cancelar */}
                         <div className="col-12 d-flex gap-2 mt-4">
                             <button type="submit" className="btn btn-success" disabled={guardando}>
-                                <i className="bi bi-check-lg me-2"/>
+                                <i className="bi bi-check-lg me-2" />
                                 {guardando ? 'Guardando...' : 'Guardar material'}
                             </button>
                             <button type="button" className="btn btn-outline-secondary" onClick={onCancelar} disabled={guardando}>

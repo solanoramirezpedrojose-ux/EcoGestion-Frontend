@@ -5,7 +5,7 @@ import './AppLayout.css';
 //Componente que contiene el menu principal de EcoGestion
 export default function AppLayout() {
     //Obtenemos el usuario y la funcion para cerrar sesion
-    const { username, logout} = useAuth();
+    const { username, logout } = useAuth();
 
     //Permite navegar entre las paginas 
     const navigate = useNavigate();
@@ -25,40 +25,40 @@ export default function AppLayout() {
 
                     {/* Logo y nombre del sistema */}
                     <NavLink to="/dashboard" className="eco-marca">
-                        <i className="bi bi-recycle eco-logo"/>
+                        <i className="bi bi-recycle eco-logo" />
                         <span>EcoGestión</span>
                     </NavLink>
 
                     {/* Navegación principal de los módulos */}
                     <nav className="eco-navegacion" aria-label="Navegación principal">
 
-                        <NavLink to="/dashboard" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
-                            <i className="bi bi-speedometer2"/>
+                        <NavLink to="/dashboard" className={({ isActive }) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-speedometer2" />
                             Dashboard
                         </NavLink>
 
-                        <NavLink to="/personas" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
-                            <i className="bi bi-people"/>
+                        <NavLink to="/personas" className={({ isActive }) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-people" />
                             Personas
                         </NavLink>
 
-                        <NavLink to="/inventario" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
-                            <i className="bi bi-box-seam"/>
+                        <NavLink to="/inventario" className={({ isActive }) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-box-seam" />
                             Inventario
                         </NavLink>
 
-                        <NavLink to="/recolecciones" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
-                            <i className="bi bi-truck"/>
+                        <NavLink to="/recolecciones" className={({ isActive }) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-truck" />
                             Recolecciones
                         </NavLink>
 
-                        <NavLink to="/ventas" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
-                            <i className="bi bi-cart-check"/>
+                        <NavLink to="/ventas" className={({ isActive }) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-cart-check" />
                             Ventas
                         </NavLink>
 
-                        <NavLink to="/pagos" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
-                            <i className="bi bi-cash-coin"/>
+                        <NavLink to="/pagos" className={({ isActive }) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-cash-coin" />
                             Pagos
                         </NavLink>
 
@@ -67,12 +67,12 @@ export default function AppLayout() {
                     {/* Información del usuario y botón para salir */}
                     <div className="eco-usuario">
                         <div className="eco-perfil">
-                            <i className="bi bi-person-circle"/>
+                            <i className="bi bi-person-circle" />
                             <span title={username || 'Usuario'}>{username || 'Usuario'}</span>
                         </div>
 
                         <button type="button" className="eco-salir" onClick={cerrarSesion}>
-                            <i className="bi bi-box-arrow-right"/>
+                            <i className="bi bi-box-arrow-right" />
                             <span>Salir</span>
                         </button>
                     </div>
@@ -82,7 +82,7 @@ export default function AppLayout() {
 
             {/* Contenido de cada módulo debajo de la barra */}
             <main className="eco-contenido">
-                <Outlet/>
+                <Outlet />
             </main>
 
         </div>
