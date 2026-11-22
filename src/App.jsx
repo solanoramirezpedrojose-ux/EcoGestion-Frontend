@@ -1,45 +1,65 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./auth/AuthContext.jsx";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './auth/AuthContext.jsx';
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
-import LoginPage from "./pages/LoginPage.jsx";
+import AppLayout from './components/AppLayout.jsx';
+import LoginPage from './pages/LoginPage.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 
-
-//Componente para controlar el acceso a la pantalla de login
-function LoginRoute() {
-  //Consultamos si el usuario ya inicio sesion
-  const { isAuthenticated } = useAuth();
-
-  //Si esta autenticado lo enviamos al Dashboard
-  //Si no esta autenticado mostramos el formulario de login
-  return isAuthenticated ? <Navigate to="/dashboard" replace/> : <LoginPage/>
+// Componente temporal para los módulos todavía no implementados
+function ModuloPendiente({ nombre }) {
+    return (
+        <div className="card border-0 shadow-sm">
+            <div className="card-body p-4">
+                <h1 className="h3">{nombre}</h1>
+                <p className="text-secondary mb-0">
+                    La pantalla de este módulo está en desarrollo.
+                </p>
+            </div>
+        </div>
+    );
 }
 
-//Componente principal de EcoGestion
+// Controlamos el acceso a la pantalla de login
+function LoginRoute() {
+    const { isAuthenticated } = useAuth();
+
+    // Si ya inició sesión, enviamos al usuario al dashboard
+    return isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />;
+}
+
+// Componente principal de EcoGestión
 export default function App() {
-  return(
-    //Compartimos la sesion del usuario con toda la aplicacion 
-    <AuthProvider>
-      {/*Habilitamos la navegacion entre paginas*/}
-      <BrowserRouter>
-        <Routes>
+    return (
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    {/* Pantalla pública de login */}
+                    <Route path="/login" element={<LoginRoute/>}/>
 
-          {/*Ruta publica para iniciar sesion*/}
-          <Route path="/login" element={<LoginRoute/>}/>
+                    {/* Rutas privadas del sistema */}
+                    <Route element={<ProtectedRoute/>}>
 
-          {/*Rutas que requieren iniciar sesion*/}
-          <Route element={<ProtectedRoute/>}>
-            {/*Pantalla principal del sistema*/}
-            <Route path="/dashboard" element={<Dashboard/>}/>
-          </Route>
+                        {/* Menú y barra superior compartidos */}
+                        <Route element={<AppLayout/>}>
 
-          {/*Redirigimos la pagina inicial al dashboard*/}
-          <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
+                            <Route path="/dashboard" element={<Dashboard/>}/>
 
-          {/*Redirigimos las rutas desconocidas*/}
-          <Route path="*" element={<Navigate to="/dashboard" replace/>}/>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-  );
+                            {/* Estas pantallas se reemplazarán por los módulos reales */}
+                            <Route path="/personas" element={<ModuloPendiente nombre="Personas" />} />
+                            <Route path="/inventario" element={<ModuloPendiente nombre="Inventario" />} />
+                            <Route path="/recolecciones" element={<ModuloPendiente nombre="Recolecciones" />} />
+                            <Route path="/ventas" element={<ModuloPendiente nombre="Ventas" />} />
+                            <Route path="/pagos" element={<ModuloPendiente nombre="Pagos" />} />
+
+                        </Route>
+                    </Route>
+
+                    {/* Redirecciones generales */}
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    );
 }
