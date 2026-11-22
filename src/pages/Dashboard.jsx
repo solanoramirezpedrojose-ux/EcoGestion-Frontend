@@ -22,25 +22,25 @@ export default function Dashboard() {
             try {
                 //Obtenemos los indicadores desde Django
                 const datos = await obtenerIndicadores();
-                if(activo) {
+                if (activo) {
                     setIndicadores(datos);
                 }
-            }catch(err) {
+            } catch (err) {
                 //Mostramos un mensaje si ocurre un error
-                if(activo) {
+                if (activo) {
                     setError(err.response ? getError(err) : err.message);
                 }
-            }finally {
+            } finally {
                 //Terminamos el estao de carga
-                if(activo) {
+                if (activo) {
                     setCargando(false);
                 }
             }
         }
         cargarDatos();
-        
+
         //Evitamos actualizar el estado si se cierra la pantalla
-        return() => {
+        return () => {
             activo = false;
         };
     }, []);
@@ -90,7 +90,7 @@ export default function Dashboard() {
                         <div className="col-md-4" key={tarjeta.titulo}>
                             <div className="card ecog-stat-card h-100">
                                 <div className="card-body p-4">
-                                    <i className={`bi ${tarjeta.icono} ecog-stat-icon`}/>
+                                    <i className={`bi ${tarjeta.icono} ecog-stat-icon`} />
                                     <h3 className="display-5 fw-bold mt-3">
                                         {tarjeta.valor}
                                     </h3>

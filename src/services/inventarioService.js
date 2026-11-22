@@ -4,7 +4,7 @@ import { api } from '../api/client.js';
 // Recibimos los filtros que el usuario seleccione
 export async function listMateriales(filtros = {}) {
     // Enviamos los filtros como parámetros a Django
-    const { data } = await api.get('/materiales/', {params: filtros});
+    const { data } = await api.get('/materiales/', { params: filtros });
 
     // Verificamos que Django devuelva los resultados paginados
     if (Array.isArray(data?.results)) {

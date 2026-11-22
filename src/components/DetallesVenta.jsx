@@ -5,7 +5,7 @@ import { listDetallesVenta, addDetalleVenta, updateDetalleVenta, deleteDetalleVe
 import { useAuth } from '../auth/AuthContext.jsx';
 
 // Componente para administrar los materiales de una venta
-export default function DetallesVenta({venta, onActualizado}) {
+export default function DetallesVenta({ venta, onActualizado }) {
     //Consultar los permisos del usuario
     const { tienePermiso } = useAuth();
 
@@ -42,24 +42,24 @@ export default function DetallesVenta({venta, onActualizado}) {
                 let pagina = 1;
                 let continuar = true;
 
-                while(continuar) {
-                    const datos = await listMateriales({page: pagina});
+                while (continuar) {
+                    const datos = await listMateriales({ page: pagina });
                     listaMateriales = [...listaMateriales, ...datos.results];
 
                     continuar = Boolean(datos.next);
                     pagina++;
                 }
 
-                if(vigente) {
+                if (vigente) {
                     setDetalles(listaDetalles);
                     setMateriales(listaMateriales);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -125,19 +125,19 @@ export default function DetallesVenta({venta, onActualizado}) {
         setMensaje('');
 
         // Validamos que se haya seleccionado un material
-        if(!materialId) {
+        if (!materialId) {
             setError('Debe seleccionar un material.');
             return;
         }
 
         // La cantidad debe ser mayor que cero
-        if(!cantidad || !Number.isFinite(Number(cantidad)) || Number(cantidad) <= 0) {
+        if (!cantidad || !Number.isFinite(Number(cantidad)) || Number(cantidad) <= 0) {
             setError('La cantidad debe ser mayor que cero.');
             return;
         }
 
         // El precio unitario debe ser mayor que cero
-        if(!precio || !Number.isFinite(Number(precio)) || Number(precio) <= 0) {
+        if (!precio || !Number.isFinite(Number(precio)) || Number(precio) <= 0) {
             setError('El precio debe ser mayor que cero.');
             return;
         }
@@ -153,11 +153,11 @@ export default function DetallesVenta({venta, onActualizado}) {
         setGuardando(true);
 
         try {
-            if(detalleEditando) {
+            if (detalleEditando) {
                 // Actualizamos un material de la venta
                 await updateDetalleVenta(detalleEditando.id, datos);
                 setMensaje('Material actualizado correctamente.');
-            }else {
+            } else {
                 // Agregamos un nuevo material a la venta
                 await addDetalleVenta(datos);
                 setMensaje('Material agregado correctamente.');
@@ -168,16 +168,16 @@ export default function DetallesVenta({venta, onActualizado}) {
             // Actualizamos los detalles y el total de la venta
             setRecargar(valor => valor + 1);
             await onActualizado();
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
-        }finally {
+        } finally {
             setGuardando(false);
         }
     }
 
     // Eliminamos un material de una venta pendiente
     async function eliminarDetalle(id) {
-        if(!window.confirm('¿Desea eliminar este material de la venta?')) {
+        if (!window.confirm('¿Desea eliminar este material de la venta?')) {
             return;
         }
 
@@ -192,14 +192,14 @@ export default function DetallesVenta({venta, onActualizado}) {
             // Actualizamos los detalles y el total calculado por Django
             setRecargar(valor => valor + 1);
             await onActualizado();
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Solo se pueden modificar detalles de ventas pendientes
     const pendiente = venta.estado === 'PENDIENTE';
-    
+
     // Comprobamos los permisos para administrar materiales
     const puedeAgregar = pendiente && tienePermiso('ventas.add_detalleventa');
     const puedeEditar = pendiente && tienePermiso('ventas.change_detalleventa');
@@ -217,14 +217,14 @@ export default function DetallesVenta({venta, onActualizado}) {
             {/* Encabezado de los materiales de la venta */}
             <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <h3 className="h6 fw-bold mb-0">
-                    <i className="bi bi-box-seam me-2"/>
+                    <i className="bi bi-box-seam me-2" />
                     Materiales de la venta
                 </h3>
 
                 {/* Solo mostramos Agregar material si tiene permiso */}
                 {puedeAgregar && (
                     <button type="button" className="btn btn-success btn-sm" onClick={nuevoDetalle}>
-                        <i className="bi bi-plus-lg me-2"/>
+                        <i className="bi bi-plus-lg me-2" />
                         Agregar material
                     </button>
                 )}
@@ -241,7 +241,7 @@ export default function DetallesVenta({venta, onActualizado}) {
 
             {/* Formulario para agregar o editar materiales */}
             {mostrarFormulario && pendiente && (
-                <div className="border rounded p-3 mb-3" style={{backgroundColor: '#F3F8F5'}}>
+                <div className="border rounded p-3 mb-3" style={{ backgroundColor: '#F3F8F5' }}>
 
                     <h4 className="h6 fw-bold mb-3">
                         {detalleEditando ? 'Editar material' : 'Agregar material a la venta'}
@@ -270,7 +270,7 @@ export default function DetallesVenta({venta, onActualizado}) {
                                 <label htmlFor="venta-cantidad" className="form-label">Cantidad (kg)</label>
 
                                 <input id="venta-cantidad" type="number" className="form-control" min="0.01" step="0.01"
-                                    placeholder="Ejemplo: 5.50" value={cantidad} onChange={event => setCantidad(event.target.value)} required/>
+                                    placeholder="Ejemplo: 5.50" value={cantidad} onChange={event => setCantidad(event.target.value)} required />
                             </div>
 
                             {/* Precio por kilogramo */}
@@ -281,7 +281,7 @@ export default function DetallesVenta({venta, onActualizado}) {
                                     <span className="input-group-text">₡</span>
 
                                     <input id="venta-precio" type="number" className="form-control" min="0.01" step="0.01"
-                                        placeholder="Ejemplo: 200.00" value={precio} onChange={event => setPrecio(event.target.value)} required/>
+                                        placeholder="Ejemplo: 200.00" value={precio} onChange={event => setPrecio(event.target.value)} required />
                                 </div>
                             </div>
 
@@ -297,7 +297,7 @@ export default function DetallesVenta({venta, onActualizado}) {
                             {/* Botones del formulario */}
                             <div className="col-12 d-flex flex-wrap gap-2 mt-2">
                                 <button type="submit" className="btn btn-success" disabled={guardando}>
-                                    <i className="bi bi-check-lg me-2"/>
+                                    <i className="bi bi-check-lg me-2" />
                                     {guardando ? 'Guardando...' : 'Guardar material'}
                                 </button>
 
@@ -352,14 +352,14 @@ export default function DetallesVenta({venta, onActualizado}) {
                                                 {/* Editar material de la venta */}
                                                 {puedeEditar && (
                                                     <button type="button" className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarDetalle(detalle)}>
-                                                        <i className="bi bi-pencil"/>
+                                                        <i className="bi bi-pencil" />
                                                     </button>
                                                 )}
 
                                                 {/* Eliminar material de la venta */}
                                                 {puedeEliminar && (
                                                     <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarDetalle(detalle.id)}>
-                                                        <i className="bi bi-trash"/>
+                                                        <i className="bi bi-trash" />
                                                     </button>
                                                 )}
 
@@ -376,9 +376,9 @@ export default function DetallesVenta({venta, onActualizado}) {
 
             {/* Total calculado por Django */}
             <div className="d-flex justify-content-end mt-3">
-                <div className="border rounded p-3" style={{backgroundColor: '#E8F3ED'}}>
+                <div className="border rounded p-3" style={{ backgroundColor: '#E8F3ED' }}>
                     <span className="text-secondary me-3">Total de la venta:</span>
-                    <strong style={{color: '#143D32'}}>₡{venta.total}</strong>
+                    <strong style={{ color: '#143D32' }}>₡{venta.total}</strong>
                 </div>
             </div>
 

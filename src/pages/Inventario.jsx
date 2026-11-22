@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getError } from '../api/client.js';
-import { listMateriales, getMaterial, addMaterial, updateMaterial, deleteMaterial} from '../services/inventarioService.js';
+import { listMateriales, getMaterial, addMaterial, updateMaterial, deleteMaterial } from '../services/inventarioService.js';
 import FormMaterial from '../components/FormMaterial.jsx';
 import { useAuth } from '../auth/AuthContext.jsx'
 import './Inventario.css';
@@ -62,14 +62,14 @@ export default function Inventario() {
                     setAnterior(datos.previous);
                 }
 
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                     setMateriales([]);
                 }
 
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -108,7 +108,7 @@ export default function Inventario() {
             setMaterialEditando(datos);
             setMaterialDetalle(null);
             setMostrarFormulario(true);
-        }catch (err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -120,7 +120,7 @@ export default function Inventario() {
             const datos = await getMaterial(id);
             setMaterialDetalle(datos);
             setMostrarFormulario(false);
-        }catch (err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -131,7 +131,7 @@ export default function Inventario() {
             // Actualizamos el material existente
             await updateMaterial(materialEditando.id, datos);
             setMensaje('Material actualizado correctamente.');
-        }else {
+        } else {
             // Registramos un material nuevo
             await addMaterial(datos);
             setMensaje('Material registrado correctamente.');
@@ -149,7 +149,7 @@ export default function Inventario() {
     async function eliminarMaterial(id) {
         const confirmar = window.confirm('¿Está seguro de que desea eliminar este material?');
 
-        if(!confirmar) {
+        if (!confirmar) {
             return;
         }
 
@@ -163,13 +163,13 @@ export default function Inventario() {
             setMensaje('Material eliminado correctamente.');
 
             // Si eliminamos el último de la página, retrocedemos
-            if(materiales.length === 1 && pagina > 1) {
+            if (materiales.length === 1 && pagina > 1) {
                 setPagina(pagina - 1);
-            }else {
+            } else {
                 setRecargar(valor => valor + 1);
             }
 
-        }catch (err) {
+        } catch (err) {
             // Django puede rechazar la eliminación por permisos o relaciones
             setError(err.response ? getError(err) : err.message);
         }
@@ -193,7 +193,7 @@ export default function Inventario() {
             <div className="inventario-hero">
                 <div>
                     <h1 className="h3 fw-bold mb-2">
-                        <i className="bi bi-box-seam me-2"/>
+                        <i className="bi bi-box-seam me-2" />
                         Gestión de inventario
                     </h1>
                     <p className="mb-0">
@@ -205,7 +205,7 @@ export default function Inventario() {
                 {/* Solo permitimos registrar materiales con el permiso correspondiente */}
                 {tienePermiso('inventario.add_material') && (
                     <button className="btn inventario-btn-nuevo" onClick={nuevoMaterial}>
-                        <i className="bi bi-plus-lg me-2"/>
+                        <i className="bi bi-plus-lg me-2" />
                         Nuevo material
                     </button>
                 )}
@@ -213,7 +213,7 @@ export default function Inventario() {
 
             {/* Tarjeta que muestra el total de materiales encontrados */}
             <div className="inventario-resumen mb-4">
-                <i className="bi bi-boxes"/>
+                <i className="bi bi-boxes" />
                 <div>
                     <span>Materiales encontrados</span>
                     <h2>{cargando ? '...' : total}</h2>
@@ -252,7 +252,7 @@ export default function Inventario() {
                     <div className="card-body p-4">
                         <div className="d-flex justify-content-between">
                             <h2 className="h5 fw-bold">Detalle del material</h2>
-                            <button className="btn-close" aria-label="Cerrar detalle" onClick={() => setMaterialDetalle(null)}/>
+                            <button className="btn-close" aria-label="Cerrar detalle" onClick={() => setMaterialDetalle(null)} />
                         </div>
 
                         <p><strong>Nombre:</strong> {materialDetalle.nombre}</p>
@@ -303,7 +303,7 @@ export default function Inventario() {
                                         }
                                     />
                                     <button type="submit" className="btn btn-success" title="Buscar">
-                                        <i className="bi bi-search"/>
+                                        <i className="bi bi-search" />
                                     </button>
                                 </div>
                             </div>
@@ -428,21 +428,21 @@ export default function Inventario() {
                                                 <div className="d-flex gap-2">
                                                     {/* Consultar */}
                                                     <button className="btn btn-sm btn-outline-success" title="Ver material" onClick={() => verMaterial(material.id)}>
-                                                        <i className="bi bi-eye"/>
+                                                        <i className="bi bi-eye" />
                                                     </button>
 
                                                     {/* Editar */}
                                                     {/* Editar material si tiene permiso */}
                                                     {tienePermiso('inventario.change_material') && (
                                                         <button className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarMaterial(material.id)}>
-                                                            <i className="bi bi-pencil"/>
+                                                            <i className="bi bi-pencil" />
                                                         </button>
                                                     )}
                                                     {/* Eliminar */}
                                                     {/* Eliminar material si tiene permiso */}
                                                     {tienePermiso('inventario.delete_material') && (
                                                         <button className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarMaterial(material.id)}>
-                                                            <i className="bi bi-trash"/>
+                                                            <i className="bi bi-trash" />
                                                         </button>
                                                     )}
                                                 </div>

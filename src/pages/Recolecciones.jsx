@@ -43,11 +43,11 @@ export default function Recolecciones() {
                 // Filtramos las personas que pueden ser proveedoras
                 const lista = personas.filter(persona => persona.tipo_persona === 'PROVEEDOR' || persona.tipo_persona === 'AMBOS');
 
-                if(vigente) {
+                if (vigente) {
                     setProveedores(lista);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                 }
             }
@@ -74,19 +74,19 @@ export default function Recolecciones() {
                     page: pagina
                 });
 
-                if(vigente) {
+                if (vigente) {
                     setRecolecciones(datos.results);
                     setTotal(datos.count);
                     setSiguiente(datos.next);
                     setAnterior(datos.previous);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                     setRecolecciones([]);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -125,7 +125,7 @@ export default function Recolecciones() {
             setRecoleccionDetalle(null);
             setMostrarFormulario(true);
 
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -139,18 +139,18 @@ export default function Recolecciones() {
             setRecoleccionDetalle(datos);
             setMostrarFormulario(false);
 
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Registramos una nueva recolección o actualizamos una existente
     async function guardarRecoleccion(datos) {
-        if(recoleccionEditando) {
+        if (recoleccionEditando) {
             // Actualizamos una recolección existente
             await updateRecoleccion(recoleccionEditando.id, datos);
             setMensaje('Recolección actualizada correctamente.');
-        }else {
+        } else {
             // Registramos una nueva recolección
             await addRecoleccion(datos);
             setMensaje('Recolección registrada correctamente.');
@@ -172,7 +172,7 @@ export default function Recolecciones() {
     // Eliminamos una recolección pendiente
     async function eliminarRecoleccion(id) {
 
-        if(!window.confirm('¿Desea eliminar esta recolección?')) {
+        if (!window.confirm('¿Desea eliminar esta recolección?')) {
             return;
         }
 
@@ -184,13 +184,13 @@ export default function Recolecciones() {
             setMensaje('Recolección eliminada correctamente.');
 
             // Si eliminamos el último registro, regresamos de página
-            if(recolecciones.length === 1 && pagina > 1) {
+            if (recolecciones.length === 1 && pagina > 1) {
                 setPagina(pagina - 1);
-            }else {
+            } else {
                 setRecargar(valor => valor + 1);
             }
 
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -199,7 +199,7 @@ export default function Recolecciones() {
     async function confirmar(id) {
         const aceptar = window.confirm('¿Desea confirmar esta recolección? Las cantidades se sumarán al inventario');
 
-        if(!aceptar) {
+        if (!aceptar) {
             return;
         }
 
@@ -210,14 +210,14 @@ export default function Recolecciones() {
             setRecoleccionDetalle(null);
             setMensaje('Recolección confirmada correctamente.');
             setRecargar(valor => valor + 1);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Cancelamos una recolección pendiente
     async function cancelar(id) {
-        if(!window.confirm('¿Desea cancelar esta recolección?')) {
+        if (!window.confirm('¿Desea cancelar esta recolección?')) {
             return;
         }
 
@@ -228,15 +228,15 @@ export default function Recolecciones() {
             setRecoleccionDetalle(null);
             setMensaje('Recolección cancelada correctamente.');
             setRecargar(valor => valor + 1);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Definimos el color de cada estado
     function claseEstado(estadoActual) {
-        if(estadoActual === 'RECIBIDA') return 'text-bg-success';
-        if(estadoActual === 'CANCELADA') return 'text-bg-danger';
+        if (estadoActual === 'RECIBIDA') return 'text-bg-success';
+        if (estadoActual === 'CANCELADA') return 'text-bg-danger';
         return 'text-bg-warning';
     }
 
@@ -249,7 +249,7 @@ export default function Recolecciones() {
             <div className="recolecciones-hero">
                 <div>
                     <h1 className="h3 fw-bold mb-2">
-                        <i className="bi bi-truck me-2"/>
+                        <i className="bi bi-truck me-2" />
                         Gestión de recolecciones
                     </h1>
                     <p className="mb-0">Registro y seguimiento de materiales recibidos</p>
@@ -258,7 +258,7 @@ export default function Recolecciones() {
                 {/* Mostramos el botón únicamente si puede registrar recolecciones */}
                 {tienePermiso('recolecciones.add_recoleccion') && (
                     <button className="btn recolecciones-btn-nueva" onClick={nuevaRecoleccion}>
-                        <i className="bi bi-plus-lg me-2"/>
+                        <i className="bi bi-plus-lg me-2" />
                         Nueva recolección
                     </button>
                 )}
@@ -266,7 +266,7 @@ export default function Recolecciones() {
 
             {/* Total de recolecciones encontradas */}
             <div className="recolecciones-resumen mb-4">
-                <i className="bi bi-clipboard-check"/>
+                <i className="bi bi-clipboard-check" />
                 <div>
                     <span>Recolecciones encontradas</span>
                     <h2>{cargando ? '...' : total}</h2>
@@ -302,7 +302,7 @@ export default function Recolecciones() {
 
                         <div className="d-flex justify-content-between">
                             <h2 className="h5 fw-bold">Recolección #{recoleccionDetalle.id}</h2>
-                            <button type="button" className="btn-close" aria-label="Cerrar detalle" onClick={() => setRecoleccionDetalle(null)}/>
+                            <button type="button" className="btn-close" aria-label="Cerrar detalle" onClick={() => setRecoleccionDetalle(null)} />
                         </div>
 
                         <p>
@@ -323,7 +323,7 @@ export default function Recolecciones() {
 
                         {/* Solo mostramos detalles si el usuario puede consultarlos */}
                         {tienePermiso('recolecciones.view_detallerecoleccion') && (
-                            <DetallesRecoleccion key={recoleccionDetalle.id} recoleccion={recoleccionDetalle}/>
+                            <DetallesRecoleccion key={recoleccionDetalle.id} recoleccion={recoleccionDetalle} />
                         )}
                     </div>
                 </div>
@@ -334,7 +334,7 @@ export default function Recolecciones() {
                 <div className="card-body p-4">
 
                     <h2 className="h5 fw-bold mb-3">
-                        <i className="bi bi-funnel me-2"/>
+                        <i className="bi bi-funnel me-2" />
                         Filtrar recolecciones
                     </h2>
 
@@ -422,7 +422,7 @@ export default function Recolecciones() {
 
                                                     {/* Consultar recolección */}
                                                     <button className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verRecoleccion(recoleccion.id)}>
-                                                        <i className="bi bi-eye"/>
+                                                        <i className="bi bi-eye" />
                                                     </button>
 
                                                     {/* Las operaciones de modificación solo aplican a pendientes */}
@@ -431,28 +431,28 @@ export default function Recolecciones() {
                                                             {/* Editar recolección */}
                                                             {tienePermiso('recolecciones.change_recoleccion') && (
                                                                 <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarRecoleccion(recoleccion.id)}>
-                                                                    <i className="bi bi-pencil"/>
+                                                                    <i className="bi bi-pencil" />
                                                                 </button>
                                                             )}
 
                                                             {/* Eliminar recolección */}
                                                             {tienePermiso('recolecciones.delete_recoleccion') && (
                                                                 <button className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarRecoleccion(recoleccion.id)}>
-                                                                    <i className="bi bi-trash"/>
+                                                                    <i className="bi bi-trash" />
                                                                 </button>
                                                             )}
 
                                                             {/* Confirmar recolección */}
                                                             {tienePermiso('recolecciones.change_recoleccion') && (
                                                                 <button className="btn btn-sm btn-success" title="Confirmar" onClick={() => confirmar(recoleccion.id)}>
-                                                                    <i className="bi bi-check-lg"/>
+                                                                    <i className="bi bi-check-lg" />
                                                                 </button>
                                                             )}
 
                                                             {/* Cancelar recolección */}
                                                             {tienePermiso('recolecciones.change_recoleccion') && (
                                                                 <button className="btn btn-sm btn-outline-secondary" title="Cancelar" onClick={() => cancelar(recoleccion.id)}>
-                                                                    <i className="bi bi-x-lg"/>
+                                                                    <i className="bi bi-x-lg" />
                                                                 </button>
                                                             )}
                                                         </>

@@ -5,7 +5,7 @@ import { api } from '../api/client.js';
 const AuthContext = createContext(null);
 
 // Componente que administra la autenticación del sistema
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
     // Recuperamos la sesión que está guardada en el navegador
     const [token, setToken] = useState(sessionStorage.getItem('ecogestion_token') || '');
     const [username, setUsername] = useState(sessionStorage.getItem('ecogestion_username') || '');
@@ -16,7 +16,7 @@ export function AuthProvider({children}) {
 
     // Consultamos los permisos cuando existe un token
     useEffect(() => {
-        if(!token) {
+        if (!token) {
             setPerfil(null);
             setCargandoPerfil(false);
             return;
@@ -30,25 +30,25 @@ export function AuthProvider({children}) {
                 // Solicitamos los grupos y permisos a Django
                 const { data } = await api.get('/usuario/');
 
-                if(vigente) {
+                if (vigente) {
                     setPerfil(data);
                     setUsername(data.username);
                     sessionStorage.setItem('ecogestion_username', data.username);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setPerfil(null);
 
                     // Si el token no es válido, cerramos la sesión
-                    if(err.response?.status === 401) {
+                    if (err.response?.status === 401) {
                         sessionStorage.removeItem('ecogestion_token');
                         sessionStorage.removeItem('ecogestion_username');
                         setToken('');
                         setUsername('');
                     }
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargandoPerfil(false);
                 }
             }

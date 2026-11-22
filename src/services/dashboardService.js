@@ -13,7 +13,7 @@ export async function obtenerIndicadores() {
     const ventas = respuestaVentas.data;
 
     //Verificamos que Django haya devuelto los datos que esperamos
-    if(!Array.isArray(personas) || typeof materiales?.count !== 'number' || !Array.isArray(ventas)) {
+    if (!Array.isArray(personas) || typeof materiales?.count !== 'number' || !Array.isArray(ventas)) {
         throw new Error('La API no devolvio los datos esperados');
     }
 

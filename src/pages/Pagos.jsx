@@ -46,7 +46,7 @@ export default function Pagos() {
                 const listaVentas = await listVentas();
                 const listaPersonas = await listPersonas();
 
-                if(vigente) {
+                if (vigente) {
                     setVentas(listaVentas);
 
                     // Obtenemos los compradores registrados
@@ -56,8 +56,8 @@ export default function Pagos() {
 
                     setCompradores(listaCompradores);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setErrorCatalogos(err.response ? getError(err) : err.message);
                 }
             }
@@ -85,16 +85,16 @@ export default function Pagos() {
                     metodo_pago: metodoPago
                 });
 
-                if(vigente) {
+                if (vigente) {
                     setPagos(datos);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                     setPagos([]);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -137,7 +137,7 @@ export default function Pagos() {
             setPagoEditando(datos);
             setPagoDetalle(null);
             setMostrarFormulario(true);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -150,7 +150,7 @@ export default function Pagos() {
 
             setPagoDetalle(datos);
             setMostrarFormulario(false);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -162,11 +162,11 @@ export default function Pagos() {
 
         let pagoGuardado;
 
-        if(pagoEditando) {
+        if (pagoEditando) {
             // Actualizamos un pago existente
             pagoGuardado = await updatePago(pagoEditando.id, datos);
             setMensaje('Pago actualizado correctamente.');
-        }else {
+        } else {
             // Registramos un nuevo pago
             pagoGuardado = await addPago(datos);
             setMensaje('Pago registrado correctamente.');
@@ -188,7 +188,7 @@ export default function Pagos() {
 
     // Eliminamos un pago después de solicitar confirmación
     async function eliminarPago(id) {
-        if(!window.confirm('¿Está seguro de que desea eliminar este pago?')) {
+        if (!window.confirm('¿Está seguro de que desea eliminar este pago?')) {
             return;
         }
 
@@ -201,16 +201,16 @@ export default function Pagos() {
             setPagoDetalle(null);
             setMensaje('Pago eliminado correctamente.');
             setRecargar(valor => valor + 1);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Convertimos el método de pago a un nombre más fácil de leer
     function nombreMetodo(metodo) {
-        if(metodo === 'EFECTIVO') return 'Efectivo';
-        if(metodo === 'TRANSFERENCIA') return 'Transferencia';
-        if(metodo === 'SINPE') return 'SINPE Móvil';
+        if (metodo === 'EFECTIVO') return 'Efectivo';
+        if (metodo === 'TRANSFERENCIA') return 'Transferencia';
+        if (metodo === 'SINPE') return 'SINPE Móvil';
         return metodo;
     }
 
@@ -231,15 +231,15 @@ export default function Pagos() {
             try {
                 const datos = await listPagos();
 
-                if(vigente) {
+                if (vigente) {
                     setTodosPagos(datos);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargandoSaldos(false);
                 }
             }
@@ -256,7 +256,7 @@ export default function Pagos() {
     function saldoVenta(ventaId) {
         const ventaEncontrada = ventas.find(item => item.id === Number(ventaId));
 
-        if(!ventaEncontrada) {
+        if (!ventaEncontrada) {
             return 0;
         }
 
@@ -264,7 +264,7 @@ export default function Pagos() {
         let totalPagado = 0;
 
         todosPagos.forEach(pago => {
-            if(Number(pago.venta) === Number(ventaId)) {
+            if (Number(pago.venta) === Number(ventaId)) {
                 totalPagado += Number(pago.monto);
             }
         });
@@ -280,7 +280,7 @@ export default function Pagos() {
             <div className="pagos-hero">
                 <div>
                     <h1 className="h3 fw-bold mb-2">
-                        <i className="bi bi-cash-coin me-2"/>
+                        <i className="bi bi-cash-coin me-2" />
                         Gestión de pagos
                     </h1>
                     <p className="mb-0">Registro y control de los pagos de ventas</p>
@@ -289,7 +289,7 @@ export default function Pagos() {
                 {/* Solo mostramos el botón si el usuario puede registrar pagos */}
                 {tienePermiso('pagos.add_pago') && (
                     <button type="button" className="btn pagos-btn-nuevo" onClick={nuevoPago}>
-                        <i className="bi bi-plus-lg me-2"/>
+                        <i className="bi bi-plus-lg me-2" />
                         Nuevo pago
                     </button>
                 )}
@@ -300,7 +300,7 @@ export default function Pagos() {
 
                 <div className="col-md-6">
                     <div className="pagos-resumen">
-                        <i className="bi bi-receipt"/>
+                        <i className="bi bi-receipt" />
                         <div>
                             <span>Pagos encontrados</span>
                             <h2>{cargando ? '...' : pagos.length}</h2>
@@ -310,7 +310,7 @@ export default function Pagos() {
 
                 <div className="col-md-6">
                     <div className="pagos-resumen">
-                        <i className="bi bi-wallet2"/>
+                        <i className="bi bi-wallet2" />
                         <div>
                             <span>Monto total de los pagos encontrados</span>
                             <h2>₡{cargando ? '...' : totalPagado.toFixed(2)}</h2>
@@ -350,7 +350,7 @@ export default function Pagos() {
 
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <h2 className="h5 fw-bold mb-0">Pago #{pagoDetalle.id}</h2>
-                            <button type="button" className="btn-close" aria-label="Cerrar detalle" onClick={() => setPagoDetalle(null)}/>
+                            <button type="button" className="btn-close" aria-label="Cerrar detalle" onClick={() => setPagoDetalle(null)} />
                         </div>
 
                         <p><strong>Venta:</strong> #{pagoDetalle.venta}</p>
@@ -382,7 +382,7 @@ export default function Pagos() {
                 <div className="card-body p-4">
 
                     <h2 className="h5 fw-bold mb-3">
-                        <i className="bi bi-funnel me-2"/>
+                        <i className="bi bi-funnel me-2" />
                         Filtrar pagos
                     </h2>
 
@@ -488,21 +488,21 @@ export default function Pagos() {
                                                     {/* Consultar pago */}
                                                     {tienePermiso('pagos.view_pago') && (
                                                         <button type="button" className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verPago(pago.id)}>
-                                                            <i className="bi bi-eye"/>
+                                                            <i className="bi bi-eye" />
                                                         </button>
                                                     )}
 
                                                     {/* Editar pago si tiene el permiso correspondiente */}
                                                     {tienePermiso('pagos.change_pago') && (
                                                         <button type="button" className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarPago(pago.id)}>
-                                                            <i className="bi bi-pencil"/>
+                                                            <i className="bi bi-pencil" />
                                                         </button>
                                                     )}
 
                                                     {/* Eliminar pago si tiene permiso */}
                                                     {tienePermiso('pagos.delete_pago') && (
                                                         <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarPago(pago.id)}>
-                                                            <i className="bi bi-trash"/>
+                                                            <i className="bi bi-trash" />
                                                         </button>
                                                     )}
                                                 </div>

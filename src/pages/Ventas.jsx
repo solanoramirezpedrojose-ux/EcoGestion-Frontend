@@ -43,11 +43,11 @@ export default function Ventas() {
                     persona.tipo_persona === 'COMPRADOR' || persona.tipo_persona === 'AMBOS'
                 );
 
-                if(vigente) {
+                if (vigente) {
                     setCompradores(lista);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setErrorCompradores(err.response ? getError(err) : err.message);
                 }
             }
@@ -68,18 +68,18 @@ export default function Ventas() {
             setError('');
 
             try {
-                const datos = await listVentas({estado: estado, comprador: comprador});
+                const datos = await listVentas({ estado: estado, comprador: comprador });
 
-                if(vigente) {
+                if (vigente) {
                     setVentas(datos);
                 }
-            }catch(err) {
-                if(vigente) {
+            } catch (err) {
+                if (vigente) {
                     setError(err.response ? getError(err) : err.message);
                     setVentas([]);
                 }
-            }finally {
-                if(vigente) {
+            } finally {
+                if (vigente) {
                     setCargando(false);
                 }
             }
@@ -115,7 +115,7 @@ export default function Ventas() {
             setVentaEditando(datos);
             setVentaDetalle(null);
             setMostrarFormulario(true);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -127,11 +127,11 @@ export default function Ventas() {
             const datos = await getVenta(id);
             setVentaDetalle(datos);
             setMostrarFormulario(false);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
-    
+
     //Actualizamos el total de la venta y su listado
     async function actualizarDatosVenta() {
         const datos = await getVenta(ventaDetalle.id);
@@ -140,7 +140,7 @@ export default function Ventas() {
         setVentaDetalle(datos);
 
         //Actualizamos tambien la tabla princpal de Ventas
-        setRecargar(valor => valor+1);
+        setRecargar(valor => valor + 1);
     }
 
     // Registramos o actualizamos una venta
@@ -150,11 +150,11 @@ export default function Ventas() {
 
         let ventaGuardada;
 
-        if(ventaEditando) {
+        if (ventaEditando) {
             // Actualizamos una venta pendiente
             ventaGuardada = await updateVenta(ventaEditando.id, datos);
             setMensaje('Venta actualizada correctamente.');
-        }else {
+        } else {
             // Registramos una nueva venta
             ventaGuardada = await addVenta(datos);
             setMensaje('Venta registrada correctamente. Ahora puede agregar materiales.');
@@ -175,7 +175,7 @@ export default function Ventas() {
 
     // Eliminamos una venta pendiente
     async function eliminarVenta(id) {
-        if(!window.confirm('¿Desea eliminar esta venta?')) {
+        if (!window.confirm('¿Desea eliminar esta venta?')) {
             return;
         }
 
@@ -186,7 +186,7 @@ export default function Ventas() {
             setVentaDetalle(null);
             setMensaje('Venta eliminada correctamente.');
             setRecargar(valor => valor + 1);
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
@@ -200,14 +200,14 @@ export default function Ventas() {
             // Verificamos que la venta tenga materiales registrados
             const detalles = await listDetallesVenta(id);
 
-            if(detalles.length === 0) {
+            if (detalles.length === 0) {
                 setError('Primero debe agregar materiales a la venta.');
                 return;
             }
 
             const aceptar = window.confirm('¿Desea confirmar esta venta? Se descontarán los materiales del inventario.');
 
-            if(!aceptar) {
+            if (!aceptar) {
                 return;
             }
 
@@ -218,14 +218,14 @@ export default function Ventas() {
             setMensaje('Venta confirmada correctamente.');
             setRecargar(valor => valor + 1);
 
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Anulamos una venta pendiente
     async function anular(id) {
-        if(!window.confirm('¿Desea anular esta venta?')) {
+        if (!window.confirm('¿Desea anular esta venta?')) {
             return;
         }
 
@@ -239,15 +239,15 @@ export default function Ventas() {
             setMensaje('Venta anulada correctamente.');
             setRecargar(valor => valor + 1);
 
-        }catch(err) {
+        } catch (err) {
             setError(err.response ? getError(err) : err.message);
         }
     }
 
     // Definimos el color de los estados
     function claseEstado(estadoActual) {
-        if(estadoActual === 'CONFIRMADA') return 'text-bg-success';
-        if(estadoActual === 'ANULADA') return 'text-bg-danger';
+        if (estadoActual === 'CONFIRMADA') return 'text-bg-success';
+        if (estadoActual === 'ANULADA') return 'text-bg-danger';
         return 'text-bg-warning';
     }
 
@@ -262,16 +262,16 @@ export default function Ventas() {
             <div className="ventas-hero">
                 <div>
                     <h1 className="h3 fw-bold mb-2">
-                        <i className="bi bi-cart-check me-2"/>
+                        <i className="bi bi-cart-check me-2" />
                         Gestión de ventas
                     </h1>
                     <p className="mb-0">Registro y control de ventas de materiales reciclables</p>
                 </div>
-            
+
                 {/* Solo mostramos el botón si puede registrar ventas */}
                 {tienePermiso('ventas.add_venta') && (
                     <button type="button" className="btn ventas-btn-nueva" onClick={nuevaVenta}>
-                        <i className="bi bi-plus-lg me-2"/>
+                        <i className="bi bi-plus-lg me-2" />
                         Nueva venta
                     </button>
                 )}
@@ -281,7 +281,7 @@ export default function Ventas() {
             <div className="row g-3 mb-4">
                 <div className="col-md-4">
                     <div className="ventas-resumen">
-                        <i className="bi bi-cart3"/>
+                        <i className="bi bi-cart3" />
                         <div>
                             <span>Ventas encontradas</span>
                             <h2>{cargando ? '...' : ventas.length}</h2>
@@ -291,7 +291,7 @@ export default function Ventas() {
 
                 <div className="col-md-4">
                     <div className="ventas-resumen">
-                        <i className="bi bi-clock-history"/>
+                        <i className="bi bi-clock-history" />
                         <div>
                             <span>Ventas pendientes</span>
                             <h2>{cargando ? '...' : ventasPendientes}</h2>
@@ -301,7 +301,7 @@ export default function Ventas() {
 
                 <div className="col-md-4">
                     <div className="ventas-resumen">
-                        <i className="bi bi-check-circle"/>
+                        <i className="bi bi-check-circle" />
                         <div>
                             <span>Ventas confirmadas</span>
                             <h2>{cargando ? '...' : ventasConfirmadas}</h2>
@@ -341,7 +341,7 @@ export default function Ventas() {
 
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <h2 className="h5 fw-bold mb-0">Venta #{ventaDetalle.id}</h2>
-                            <button type="button" className="btn-close" aria-label="Cerrar detalle" onClick={() => setVentaDetalle(null)}/>
+                            <button type="button" className="btn-close" aria-label="Cerrar detalle" onClick={() => setVentaDetalle(null)} />
                         </div>
 
                         <p><strong>Comprador:</strong> {nombreComprador(ventaDetalle.comprador)}</p>
@@ -354,10 +354,10 @@ export default function Ventas() {
                         </p>
                         <p><strong>Total:</strong> ₡{ventaDetalle.total}</p>
 
-                        {/* Mostramos los materiales de la venta seleccionada */}    
+                        {/* Mostramos los materiales de la venta seleccionada */}
                         {/* Mostramos los detalles únicamente si tiene permiso de lectura */}
                         {tienePermiso('ventas.view_detalleventa') ? (
-                            <DetallesVenta key={ventaDetalle.id} venta={ventaDetalle} onActualizado={actualizarDatosVenta}/>
+                            <DetallesVenta key={ventaDetalle.id} venta={ventaDetalle} onActualizado={actualizarDatosVenta} />
                         ) : (
                             <div className="alert alert-warning">
                                 No tiene permiso para consultar los materiales de esta venta.
@@ -373,7 +373,7 @@ export default function Ventas() {
                 <div className="card-body p-4">
 
                     <h2 className="h5 fw-bold mb-3">
-                        <i className="bi bi-funnel me-2"/>
+                        <i className="bi bi-funnel me-2" />
                         Filtrar ventas
                     </h2>
 
@@ -453,7 +453,7 @@ export default function Ventas() {
 
                                                     {/* Consultar información de la venta */}
                                                     <button type="button" className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verVenta(venta.id)}>
-                                                        <i className="bi bi-eye"/>
+                                                        <i className="bi bi-eye" />
                                                     </button>
 
                                                     {/* Estas acciones solo aplican a ventas pendientes */}
@@ -463,28 +463,28 @@ export default function Ventas() {
                                                             {/* Editar venta */}
                                                             {tienePermiso('ventas.change_venta') && (
                                                                 <button type="button" className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarVenta(venta.id)}>
-                                                                    <i className="bi bi-pencil"/>
+                                                                    <i className="bi bi-pencil" />
                                                                 </button>
                                                             )}
 
                                                             {/* Eliminar venta */}
                                                             {tienePermiso('ventas.delete_venta') && (
                                                                 <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarVenta(venta.id)}>
-                                                                    <i className="bi bi-trash"/>
+                                                                    <i className="bi bi-trash" />
                                                                 </button>
                                                             )}
 
                                                             {/* Confirmar venta y descontar stock */}
                                                             {tienePermiso('ventas.change_venta') && (
                                                                 <button type="button" className="btn btn-sm btn-success" title="Confirmar" onClick={() => confirmar(venta.id)}>
-                                                                    <i className="bi bi-check-lg"/>
+                                                                    <i className="bi bi-check-lg" />
                                                                 </button>
                                                             )}
 
                                                             {/* Anular venta */}
                                                             {tienePermiso('ventas.change_venta') && (
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary" title="Anular" onClick={() => anular(venta.id)}>
-                                                                    <i className="bi bi-x-lg"/>
+                                                                    <i className="bi bi-x-lg" />
                                                                 </button>
                                                             )}
 
