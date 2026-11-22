@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react';
 import { getError } from '../api/client.js';
 import { listMateriales, getMaterial, addMaterial, updateMaterial, deleteMaterial} from '../services/inventarioService.js';
 import FormMaterial from '../components/FormMaterial.jsx';
+import { useAuth } from '../auth/AuthContext.jsx'
 import './Inventario.css';
 
 // Pantalla principal del módulo de Inventario
 export default function Inventario() {
+    // Obtenemos los permisos asignados por Django
+    const { tienePermiso } = useAuth();
+
     // Estados para almacenar los materiales y controlar la carga
     const [materiales, setMateriales] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -198,10 +202,13 @@ export default function Inventario() {
                 </div>
 
                 {/* Botón para registrar materiales */}
-                <button className="btn inventario-btn-nuevo" onClick={nuevoMaterial}>
-                    <i className="bi bi-plus-lg me-2"/>
-                    Nuevo material
-                </button>
+                {/* Solo permitimos registrar materiales con el permiso correspondiente */}
+                {tienePermiso('inventario.add_material') && (
+                    <button className="btn inventario-btn-nuevo" onClick={nuevoMaterial}>
+                        <i className="bi bi-plus-lg me-2"/>
+                        Nuevo material
+                    </button>
+                )}
             </div>
 
             {/* Tarjeta que muestra el total de materiales encontrados */}
@@ -425,14 +432,19 @@ export default function Inventario() {
                                                     </button>
 
                                                     {/* Editar */}
-                                                    <button className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarMaterial(material.id)}>
-                                                        <i className="bi bi-pencil"/>
-                                                    </button>
-
+                                                    {/* Editar material si tiene permiso */}
+                                                    {tienePermiso('inventario.change_material') && (
+                                                        <button className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarMaterial(material.id)}>
+                                                            <i className="bi bi-pencil"/>
+                                                        </button>
+                                                    )}
                                                     {/* Eliminar */}
-                                                    <button className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarMaterial(material.id)}>
-                                                        <i className="bi bi-trash"/>
-                                                    </button>
+                                                    {/* Eliminar material si tiene permiso */}
+                                                    {tienePermiso('inventario.delete_material') && (
+                                                        <button className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarMaterial(material.id)}>
+                                                            <i className="bi bi-trash"/>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>

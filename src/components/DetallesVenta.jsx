@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import { getError } from '../api/client.js';
 import { listMateriales } from '../services/inventarioService.js';
 import { listDetallesVenta, addDetalleVenta, updateDetalleVenta, deleteDetalleVenta } from '../services/ventasService.js';
+import { useAuth } from '../auth/AuthContext.jsx';
 
 // Componente para administrar los materiales de una venta
 export default function DetallesVenta({venta, onActualizado}) {
+    //Consultar los permisos del usuario
+    const { tienePermiso } = useAuth();
+
     // Estados para almacenar los materiales y detalles
     const [detalles, setDetalles] = useState([]);
     const [materiales, setMateriales] = useState([]);
@@ -195,6 +199,12 @@ export default function DetallesVenta({venta, onActualizado}) {
 
     // Solo se pueden modificar detalles de ventas pendientes
     const pendiente = venta.estado === 'PENDIENTE';
+    
+    // Comprobamos los permisos para administrar materiales
+    const puedeAgregar = pendiente && tienePermiso('ventas.add_detalleventa');
+    const puedeEditar = pendiente && tienePermiso('ventas.change_detalleventa');
+    const puedeEliminar = pendiente && tienePermiso('ventas.delete_detalleventa');
+    const mostrarAcciones = puedeEditar || puedeEliminar;
 
     // Mostramos materiales activos y el material que estamos editando
     const materialesDisponibles = materiales.filter(material =>
@@ -211,7 +221,8 @@ export default function DetallesVenta({venta, onActualizado}) {
                     Materiales de la venta
                 </h3>
 
-                {pendiente && (
+                {/* Solo mostramos Agregar material si tiene permiso */}
+                {puedeAgregar && (
                     <button type="button" className="btn btn-success btn-sm" onClick={nuevoDetalle}>
                         <i className="bi bi-plus-lg me-2"/>
                         Agregar material
@@ -319,7 +330,8 @@ export default function DetallesVenta({venta, onActualizado}) {
                                 <th>Cantidad (kg)</th>
                                 <th>Precio/kg</th>
                                 <th>Subtotal</th>
-                                {pendiente && <th>Acciones</th>}
+                                {/* Mostramos la columna únicamente si hay acciones permitidas */}
+                                {mostrarAcciones && <th>Acciones</th>}
                             </tr>
                         </thead>
 
@@ -332,19 +344,29 @@ export default function DetallesVenta({venta, onActualizado}) {
                                     <td className="fw-semibold">₡{detalle.subtotal}</td>
 
                                     {/* Solo mostramos acciones si la venta está pendiente */}
-                                    {pendiente && (
+                                    {/* Mostramos únicamente las acciones autorizadas */}
+                                    {mostrarAcciones && (
                                         <td>
                                             <div className="d-flex gap-2">
-                                                <button type="button" className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarDetalle(detalle)}>
-                                                    <i className="bi bi-pencil"/>
-                                                </button>
 
-                                                <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarDetalle(detalle.id)}>
-                                                    <i className="bi bi-trash"/>
-                                                </button>
+                                                {/* Editar material de la venta */}
+                                                {puedeEditar && (
+                                                    <button type="button" className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarDetalle(detalle)}>
+                                                        <i className="bi bi-pencil"/>
+                                                    </button>
+                                                )}
+
+                                                {/* Eliminar material de la venta */}
+                                                {puedeEliminar && (
+                                                    <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarDetalle(detalle.id)}>
+                                                        <i className="bi bi-trash"/>
+                                                    </button>
+                                                )}
+
                                             </div>
                                         </td>
                                     )}
+
                                 </tr>
                             ))}
                         </tbody>

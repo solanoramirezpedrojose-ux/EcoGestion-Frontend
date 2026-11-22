@@ -1,14 +1,15 @@
-
 import { useEffect, useState } from 'react';
 import { getError } from '../api/client.js';
 import { listPersonas } from '../services/personasService.js';
 import { listRecolecciones, getRecoleccion, addRecoleccion, updateRecoleccion, deleteRecoleccion, confirmarRecoleccion, cancelarRecoleccion } from '../services/recoleccionesService.js';
 import FormRecoleccion from '../components/FormRecoleccion.jsx';
 import DetallesRecoleccion from '../components/DetallesRecoleccion.jsx';
+import { useAuth } from '../auth/AuthContext.jsx'
 import './Recolecciones.css';
 
 // Pantalla principal del módulo de Recolecciones
 export default function Recolecciones() {
+    const { tienePermiso } = useAuth();
     // Estados para almacenar las recolecciones y proveedores
     const [recolecciones, setRecolecciones] = useState([]);
     const [proveedores, setProveedores] = useState([]);
@@ -45,7 +46,6 @@ export default function Recolecciones() {
                 if(vigente) {
                     setProveedores(lista);
                 }
-
             }catch(err) {
                 if(vigente) {
                     setError(err.response ? getError(err) : err.message);
@@ -254,11 +254,14 @@ export default function Recolecciones() {
                     </h1>
                     <p className="mb-0">Registro y seguimiento de materiales recibidos</p>
                 </div>
-
-                <button className="btn recolecciones-btn-nueva" onClick={nuevaRecoleccion}>
-                    <i className="bi bi-plus-lg me-2"/>
-                    Nueva recolección
-                </button>
+                {/* Registrar */}
+                {/* Mostramos el botón únicamente si puede registrar recolecciones */}
+                {tienePermiso('recolecciones.add_recoleccion') && (
+                    <button className="btn recolecciones-btn-nueva" onClick={nuevaRecoleccion}>
+                        <i className="bi bi-plus-lg me-2"/>
+                        Nueva recolección
+                    </button>
+                )}
             </div>
 
             {/* Total de recolecciones encontradas */}
@@ -318,8 +321,10 @@ export default function Recolecciones() {
                             <strong>Observaciones:</strong> {recoleccionDetalle.observaciones || 'Sin observaciones'}
                         </p>
 
-                        {/* Mostramos los materiales registrados en esta recolección */}
-                        <DetallesRecoleccion key={recoleccionDetalle.id} recoleccion={recoleccionDetalle}/>
+                        {/* Solo mostramos detalles si el usuario puede consultarlos */}
+                        {tienePermiso('recolecciones.view_detallerecoleccion') && (
+                            <DetallesRecoleccion key={recoleccionDetalle.id} recoleccion={recoleccionDetalle}/>
+                        )}
                     </div>
                 </div>
             )}
@@ -412,42 +417,44 @@ export default function Recolecciones() {
                                                     {recoleccion.estado}
                                                 </span>
                                             </td>
-
                                             <td>
                                                 <div className="d-flex flex-wrap gap-2">
 
                                                     {/* Consultar recolección */}
-                                                    <button className="btn btn-sm btn-outline-success" title="Consultar"
-                                                        onClick={() => verRecoleccion(recoleccion.id)}>
+                                                    <button className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verRecoleccion(recoleccion.id)}>
                                                         <i className="bi bi-eye"/>
                                                     </button>
 
-                                                    {/* Acciones disponibles para recolecciones pendientes */}
+                                                    {/* Las operaciones de modificación solo aplican a pendientes */}
                                                     {recoleccion.estado === 'PENDIENTE' && (
                                                         <>
+                                                            {/* Editar recolección */}
+                                                            {tienePermiso('recolecciones.change_recoleccion') && (
+                                                                <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarRecoleccion(recoleccion.id)}>
+                                                                    <i className="bi bi-pencil"/>
+                                                                </button>
+                                                            )}
 
-                                                            {/* Editar */}
-                                                            <button className="btn btn-sm btn-outline-primary" title="Editar"
-                                                                onClick={() => editarRecoleccion(recoleccion.id)}>
-                                                                <i className="bi bi-pencil"/>
-                                                            </button>
+                                                            {/* Eliminar recolección */}
+                                                            {tienePermiso('recolecciones.delete_recoleccion') && (
+                                                                <button className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarRecoleccion(recoleccion.id)}>
+                                                                    <i className="bi bi-trash"/>
+                                                                </button>
+                                                            )}
 
-                                                            {/* Eliminar */}
-                                                            <button className="btn btn-sm btn-outline-danger" title="Eliminar"
-                                                                onClick={() => eliminarRecoleccion(recoleccion.id)}>
-                                                                <i className="bi bi-trash"/>
-                                                            </button>
+                                                            {/* Confirmar recolección */}
+                                                            {tienePermiso('recolecciones.change_recoleccion') && (
+                                                                <button className="btn btn-sm btn-success" title="Confirmar" onClick={() => confirmar(recoleccion.id)}>
+                                                                    <i className="bi bi-check-lg"/>
+                                                                </button>
+                                                            )}
 
-                                                            {/* Confirmar */}
-                                                            <button className="btn btn-sm btn-success" title="Confirmar"
-                                                                onClick={() => confirmar(recoleccion.id)}>
-                                                                <i className="bi bi-check-lg"/>
-                                                            </button>
-
-                                                            {/* Cancelar */}
-                                                            <button className="btn btn-sm btn-outline-secondary" title="Cancelar" onClick={() => cancelar(recoleccion.id)}>
-                                                                <i className="bi bi-x-lg"/>
-                                                            </button>
+                                                            {/* Cancelar recolección */}
+                                                            {tienePermiso('recolecciones.change_recoleccion') && (
+                                                                <button className="btn btn-sm btn-outline-secondary" title="Cancelar" onClick={() => cancelar(recoleccion.id)}>
+                                                                    <i className="bi bi-x-lg"/>
+                                                                </button>
+                                                            )}
                                                         </>
                                                     )}
                                                 </div>

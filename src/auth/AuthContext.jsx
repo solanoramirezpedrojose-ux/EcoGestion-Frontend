@@ -1,66 +1,120 @@
-import { createContext, useContext, useState } from "react";
-import { api, getError } from '../api/client.js';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { api } from '../api/client.js';
 
-//Creamos el contexto para compartir la autenticacion
+// Creamos el contexto para compartir los datos del usuario
 const AuthContext = createContext(null);
 
-//Componente que administra la sesion del usuario
-export function AuthProvider({ children }) {
-    //Obtenemos el token y el usuario guardados en el navegador
-    const [token, setToken] = useState(() => sessionStorage.getItem('ecogestion_token'));
-    const [username, setUsername] = useState(() => sessionStorage.getItem('ecogestion_username'));
+// Componente que administra la autenticación del sistema
+export function AuthProvider({children}) {
+    // Recuperamos la sesión que está guardada en el navegador
+    const [token, setToken] = useState(sessionStorage.getItem('ecogestion_token') || '');
+    const [username, setUsername] = useState(sessionStorage.getItem('ecogestion_username') || '');
 
-    //Funcion para iniciar sesion
-    async function login(usernameInput, password) {
-        try{
-            //Enviamos el usuario y la contrasena a Django    
-            const { data } = await api.post('/token/', {
-                username: usernameInput,
-                password
-            });
+    // Guardamos la información y permisos del usuario
+    const [perfil, setPerfil] = useState(null);
+    const [cargandoPerfil, setCargandoPerfil] = useState(Boolean(token));
 
-            //Verificamos que Django haya devuelto un token
-            if (!data?.token) {
-                throw new Error('El servidor no devolvio el token');
-            }
-
-            //Guardamos los dato de la seion en el navegador
-            sessionStorage.setItem('ecogestion_token', data.token);
-            sessionStorage.setItem('ecogestion_username', usernameInput);
-
-            //Actualizamos el estado de react
-            setToken(data.token);
-            setUsername(usernameInput);
-        }catch(error) {
-            //Mostramos el error si no se puede iniciar sesion
-            throw new Error(error.response ? getError(error) : error.message);
+    // Consultamos los permisos cuando existe un token
+    useEffect(() => {
+        if(!token) {
+            setPerfil(null);
+            setCargandoPerfil(false);
+            return;
         }
+
+        let vigente = true;
+
+        async function cargarPerfil() {
+            setCargandoPerfil(true);
+            try {
+                // Solicitamos los grupos y permisos a Django
+                const { data } = await api.get('/usuario/');
+
+                if(vigente) {
+                    setPerfil(data);
+                    setUsername(data.username);
+                    sessionStorage.setItem('ecogestion_username', data.username);
+                }
+            }catch(err) {
+                if(vigente) {
+                    setPerfil(null);
+
+                    // Si el token no es válido, cerramos la sesión
+                    if(err.response?.status === 401) {
+                        sessionStorage.removeItem('ecogestion_token');
+                        sessionStorage.removeItem('ecogestion_username');
+                        setToken('');
+                        setUsername('');
+                    }
+                }
+            }finally {
+                if(vigente) {
+                    setCargandoPerfil(false);
+                }
+            }
+        }
+
+        cargarPerfil();
+
+        return () => {
+            vigente = false;
+        };
+    }, [token]);
+
+    // Iniciamos sesión utilizando el endpoint de Django
+    async function login(usernameInput, password) {
+        const { data } = await api.post('/token/', {
+            username: usernameInput,
+            password: password
+        });
+
+        // Guardamos el token y el nombre de usuario
+        sessionStorage.setItem('ecogestion_token', data.token);
+        sessionStorage.setItem('ecogestion_username', usernameInput);
+
+        setPerfil(null);
+        setCargandoPerfil(true);
+        setToken(data.token);
+        setUsername(usernameInput);
+
+        return data;
     }
 
-    //Funcion para cerrar sesion
+    // Cerramos la sesión y eliminamos los datos guardados
     function logout() {
-        //Eliminamos los datos guardados en el navegador
         sessionStorage.removeItem('ecogestion_token');
         sessionStorage.removeItem('ecogestion_username');
 
-        //Limpiamos los datos del usuario
-        setToken(null);
+        setToken('');
         setUsername('');
+        setPerfil(null);
+        setCargandoPerfil(false);
     }
 
-    //Compartimos la informacion de la sesion con los componentes
-    return(
-        <AuthContext.Provider value = {{
-            login,
-            logout,
+    // Comprobamos si el usuario tiene un permiso específico
+    function tienePermiso(permiso) {
+        return perfil?.permisos?.includes(permiso) || false;
+    }
+
+    // Compartimos los datos de autenticación con React
+    return (
+        <AuthContext.Provider value={{
             token,
             username,
-            isAuthenticated: Boolean(token)
+            perfil,
+            grupos: perfil?.grupos || [],
+            cargandoPerfil,
+            isAuthenticated: Boolean(token),
+            login,
+            logout,
+            tienePermiso
         }}>
             {children}
         </AuthContext.Provider>
     );
 }
 
-//Permitir utilizar la autenticacion desde otros componentes
-export const useAuth = () => useContext(AuthContext);
+// Función para utilizar la autenticación en otros componentes
+export function useAuth() {
+    return useContext(AuthContext);
+}
