@@ -4,6 +4,7 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import AppLayout from './components/AppLayout.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import Personas from './pages/Personas.jsx';
 
 // Componente temporal para los módulos todavía no implementados
 function ModuloPendiente({ nombre }) {
@@ -45,7 +46,8 @@ export default function App() {
                             <Route path="/dashboard" element={<Dashboard/>}/>
 
                             {/* Estas pantallas se reemplazarán por los módulos reales */}
-                            <Route path="/personas" element={<ModuloPendiente nombre="Personas" />} />
+                            {/* Pantalla real del módulo Personas */}
+                            <Route path="/personas" element={<Personas/>}/>
                             <Route path="/inventario" element={<ModuloPendiente nombre="Inventario" />} />
                             <Route path="/recolecciones" element={<ModuloPendiente nombre="Recolecciones" />} />
                             <Route path="/ventas" element={<ModuloPendiente nombre="Ventas" />} />
