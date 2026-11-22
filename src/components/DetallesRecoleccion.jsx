@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import { getError } from '../api/client.js';
 import { listMateriales } from '../services/inventarioService.js';
 import { listDetallesRecoleccion, addDetalleRecoleccion, updateDetalleRecoleccion, deleteDetalleRecoleccion } from '../services/recoleccionesService.js';
+import { useAuth } from '../auth/AuthContext.jsx';
 
 // Componente para administrar los materiales de una recolección
 export default function DetallesRecoleccion({recoleccion}) {
+    //Consultamos los permisos de usuario
+    const { tienePermiso } = useAuth();
+    
     // Estados para almacenar materiales y detalles
     const [detalles, setDetalles] = useState([]);
     const [materiales, setMateriales] = useState([]);
@@ -182,7 +186,8 @@ export default function DetallesRecoleccion({recoleccion}) {
                     Materiales de la recolección
                 </h3>
 
-                {pendiente && (
+                {/* Solo agregamos materiales con el permiso correspondiente */}
+                {pendiente && tienePermiso('recolecciones.add_detallerecoleccion') && (
                     <button type="button" className="btn btn-success btn-sm" onClick={nuevoDetalle}>
                         <i className="bi bi-plus-lg me-2"/>
                         Agregar material
@@ -269,18 +274,25 @@ export default function DetallesRecoleccion({recoleccion}) {
                                     <td>{detalle.cantidad_kg} kg</td>
 
                                     {/* Solo permitimos editar o eliminar si está pendiente */}
+                                    {/* Mostramos las acciones únicamente cuando la recolección está pendiente */}
                                     {pendiente && (
                                         <td>
                                             <div className="d-flex gap-2">
-                                                <button type="button" className="btn btn-sm btn-outline-primary"
-                                                    title="Editar material" onClick={() => editarDetalle(detalle)}>
-                                                    <i className="bi bi-pencil"/>
-                                                </button>
 
-                                                <button type="button" className="btn btn-sm btn-outline-danger"
-                                                    title="Eliminar material" onClick={() => eliminarDetalle(detalle.id)}>
-                                                    <i className="bi bi-trash"/>
-                                                </button>
+                                                {/* Editar material */}
+                                                {tienePermiso('recolecciones.change_detallerecoleccion') && (
+                                                    <button type="button" className="btn btn-sm btn-outline-primary" title="Editar material" onClick={() => editarDetalle(detalle)}>
+                                                        <i className="bi bi-pencil"/>
+                                                    </button>
+                                                )}
+
+                                                {/* Eliminar material */}
+                                                {tienePermiso('recolecciones.delete_detallerecoleccion') && (
+                                                    <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar material" onClick={() => eliminarDetalle(detalle.id)}>
+                                                        <i className="bi bi-trash"/>
+                                                    </button>
+                                                )}
+
                                             </div>
                                         </td>
                                     )}

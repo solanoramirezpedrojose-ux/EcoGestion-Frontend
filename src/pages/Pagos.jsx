@@ -5,9 +5,12 @@ import { listPersonas } from '../services/personasService.js';
 import { listPagos, getPago, addPago, updatePago, deletePago } from '../services/pagosService.js';
 import FormPago from '../components/FormPago.jsx';
 import './Pagos.css';
+import { useAuth } from '../auth/AuthContext.jsx';
 
 // Pantalla principal del módulo de Pagos
 export default function Pagos() {
+    //Obtenemos la funcion para consultar los permisos
+    const { tienePermiso } = useAuth();
     // Estados para los pagos, ventas y compradores
     const [pagos, setPagos] = useState([]);
     const [ventas, setVentas] = useState([]);
@@ -283,10 +286,13 @@ export default function Pagos() {
                     <p className="mb-0">Registro y control de los pagos de ventas</p>
                 </div>
 
-                <button type="button" className="btn pagos-btn-nuevo" onClick={nuevoPago}>
-                    <i className="bi bi-plus-lg me-2"/>
-                    Nuevo pago
-                </button>
+                {/* Solo mostramos el botón si el usuario puede registrar pagos */}
+                {tienePermiso('pagos.add_pago') && (
+                    <button type="button" className="btn pagos-btn-nuevo" onClick={nuevoPago}>
+                        <i className="bi bi-plus-lg me-2"/>
+                        Nuevo pago
+                    </button>
+                )}
             </div>
 
             {/* Tarjetas con información de los pagos filtrados */}
@@ -480,20 +486,25 @@ export default function Pagos() {
                                                 <div className="d-flex gap-2">
 
                                                     {/* Consultar pago */}
-                                                    <button type="button" className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verPago(pago.id)}>
-                                                        <i className="bi bi-eye"/>
-                                                    </button>
+                                                    {tienePermiso('pagos.view_pago') && (
+                                                        <button type="button" className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verPago(pago.id)}>
+                                                            <i className="bi bi-eye"/>
+                                                        </button>
+                                                    )}
 
-                                                    {/* Editar pago */}
-                                                    <button type="button" className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarPago(pago.id)}>
-                                                        <i className="bi bi-pencil"/>
-                                                    </button>
+                                                    {/* Editar pago si tiene el permiso correspondiente */}
+                                                    {tienePermiso('pagos.change_pago') && (
+                                                        <button type="button" className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarPago(pago.id)}>
+                                                            <i className="bi bi-pencil"/>
+                                                        </button>
+                                                    )}
 
-                                                    {/* Eliminar pago */}
-                                                    <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarPago(pago.id)}>
-                                                        <i className="bi bi-trash"/>
-                                                    </button>
-
+                                                    {/* Eliminar pago si tiene permiso */}
+                                                    {tienePermiso('pagos.delete_pago') && (
+                                                        <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarPago(pago.id)}>
+                                                            <i className="bi bi-trash"/>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>

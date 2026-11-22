@@ -16,77 +16,75 @@ export default function AppLayout() {
         navigate('/login', { replace: true });
     }
 
-    //Opciones de navegacion del sistema
-    const opciones = [
-        { nombre: 'Dashboard', ruta: '/dashboard', icono: 'bi-speedometer2' },
-        { nombre: 'Personas', ruta: '/personas', icono: 'bi-people' },
-        { nombre: 'Inventario', ruta: '/inventario', icono: 'bi-box-seam' },
-        { nombre: 'Recolecciones', ruta: '/recolecciones', icono: 'bi-truck' },
-        { nombre: 'Ventas', ruta: '/ventas', icono: 'bi-cart-check' },
-        { nombre: 'Pagos', ruta: '/pagos', icono: 'bi-cash-coin' }
-    ];
+    return (
+        <div className="eco-layout">
 
-    return(
-        <div className="ecog-app-layout">
-            {/*Menu lateral para computadoras*/}
-            <aside className="ecog-sidebar d-none d-lg-flex">
-                {/*Nombre e icono del sistema*/}
-                <div className="ecog-sidebar-brand">
-                    <i className="bi bi-recycle me-2"/>
-                    EcoGestion
-                </div>
+            {/* Barra de navegación superior */}
+            <header className="eco-topbar">
+                <div className="eco-topbar-contenido">
 
-                <p className="ecog-sidebar-label">
-                    ADMINISTRACION
-                </p>
+                    {/* Logo y nombre del sistema */}
+                    <NavLink to="/dashboard" className="eco-marca">
+                        <i className="bi bi-recycle eco-logo"/>
+                        <span>EcoGestión</span>
+                    </NavLink>
 
-                {/*Opciones para navegar entre modulos*/}
-                <nav className="nav flex-column gap-2" aria-label="Menu principal">
-                    {opciones.map((opcion) => (
-                        <NavLink key={opcion.ruta} to={opcion.ruta} className={({ isActive}) => `ecog-sidebar-link ${isActive ? 'active' : ''}`}>
-                            <i className={`bi ${opcion.icono} me-2`}/>
-                            {opcion.nombre}
+                    {/* Navegación principal de los módulos */}
+                    <nav className="eco-navegacion" aria-label="Navegación principal">
+
+                        <NavLink to="/dashboard" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-speedometer2"/>
+                            Dashboard
                         </NavLink>
-                    ))}
-                </nav>
-                <div className="ecog-sidebar-footer">
-                    Sistema de gestion de reciclaje
-                </div>
-            </aside>
-            {/*Area derecha de la aplicacion*/}
-            <div className="ecog-app-main">
-                {/*Barra superior con usuario y cierre de sesion*/}
-                <header className="ecog-topbar">
-                    <span className="fw-bold ecog-topbar-title">
-                        <i className="bi bi-recycle me-2"/>
-                        EcoGestion
-                    </span>
-                    <div className="d-flex align-items-center gap-3">
-                        <span className="ecog-username">
-                            <i className="bi bi-person-circle me-2"/>
-                            {username}
-                        </span>
-                        <button className="btn btn-outline-danger btn-sm" onClick={cerrarSesion}>
-                            <i className="bi bi-box-arrow-right me-1"/>
-                            Salir
+
+                        <NavLink to="/personas" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-people"/>
+                            Personas
+                        </NavLink>
+
+                        <NavLink to="/inventario" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-box-seam"/>
+                            Inventario
+                        </NavLink>
+
+                        <NavLink to="/recolecciones" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-truck"/>
+                            Recolecciones
+                        </NavLink>
+
+                        <NavLink to="/ventas" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-cart-check"/>
+                            Ventas
+                        </NavLink>
+
+                        <NavLink to="/pagos" className={({isActive}) => `eco-enlace ${isActive ? 'activo' : ''}`}>
+                            <i className="bi bi-cash-coin"/>
+                            Pagos
+                        </NavLink>
+
+                    </nav>
+
+                    {/* Información del usuario y botón para salir */}
+                    <div className="eco-usuario">
+                        <div className="eco-perfil">
+                            <i className="bi bi-person-circle"/>
+                            <span title={username || 'Usuario'}>{username || 'Usuario'}</span>
+                        </div>
+
+                        <button type="button" className="eco-salir" onClick={cerrarSesion}>
+                            <i className="bi bi-box-arrow-right"/>
+                            <span>Salir</span>
                         </button>
                     </div>
-                </header>
-                {/*Menu para pantallas pequeñas*/}
-                <nav className="ecog-mobile-menu d-lg-none" aria-label="Menu">
-                    {opciones.map((opcion) => (
-                        <NavLink key={opcion.ruta} to={opcion.ruta} className={({ isActive }) => `ecog-mobile-link ${isActive ? 'active' : ''}`}>
-                            <i className={`bi ${opcion.icono} me-1`}/>
-                            {opcion.nombre}
-                        </NavLink>
-                    ))}
-                </nav>
 
-                {/*Aqui se muestra la pagina seleccionada*/}
-                <main className="ecog-page-content">
-                    <Outlet/>
-                </main>
-            </div>
+                </div>
+            </header>
+
+            {/* Contenido de cada módulo debajo de la barra */}
+            <main className="eco-contenido">
+                <Outlet/>
+            </main>
+
         </div>
     );
 }

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getError } from "../api/client";
 import { listPersonas, getPersona, addPersona, updatePersona, deletePersona } from "../services/personasService.js";
+import { useAuth } from '../auth/AuthContext.jsx'
 import FormPersona from "../components/FormPersona.jsx";
+import './Personas.css';
 
 //Pantalla principal del modulo de personas
 export default function Personas() {
+    const { tienePermiso } = useAuth();
     const [personas, setPersonas] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState('');
@@ -129,10 +132,13 @@ export default function Personas() {
                     </p>
                 </div>
 
+            {/* Mostramos el botón solo si tiene permiso para registrar */}
+            {tienePermiso('personas.add_persona') && (
                 <button className="btn personas-btn-nueva" onClick={nuevaPersona}>
                     <i className="bi bi-plus-lg me-2"/>
                     Nueva persona
                 </button>
+            )}
             </div>
 
             {/* Indicadores calculados a partir de la API */}
@@ -246,12 +252,18 @@ export default function Personas() {
                                                     <button className="btn btn-sm btn-outline-success" title="Ver detalle" onClick={() => verPersona(persona.id)}>
                                                         <i className="bi bi-eye"/>
                                                     </button>
-                                                    <button className="btn btn-sm btn-outline-primary" title="Editar persona" onClick={() => editarPersona(persona.id)}>
-                                                        <i className="bi bi-pencil"/>
-                                                    </button>
-                                                    <button className="btn btn-sm btn-outline-danger" title="Eliminar persona" onClick={() => eliminarPersona(persona.id)}>
-                                                        <i className="bi bi-trash"/>
-                                                    </button>
+                                                    {/* Botón disponible únicamente para usuarios con permiso de edición */}
+                                                    {tienePermiso('personas.change_persona') && (
+                                                        <button className="btn btn-sm btn-outline-primary" title="Editar persona" onClick={() => editarPersona(persona.id)}>
+                                                            <i className="bi bi-pencil"/>
+                                                        </button>
+                                                    )}
+                                                    {/* Botón disponible únicamente para usuarios con permiso de eliminación */}
+                                                    {tienePermiso('personas.delete_persona') && (
+                                                        <button className="btn btn-sm btn-outline-danger" title="Eliminar persona" onClick={() => eliminarPersona(persona.id)}>
+                                                            <i className="bi bi-trash"/>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>

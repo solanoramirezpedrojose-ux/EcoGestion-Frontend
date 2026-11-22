@@ -5,9 +5,12 @@ import { listVentas, getVenta, addVenta, updateVenta, deleteVenta, confirmarVent
 import FormVenta from '../components/FormVenta.jsx';
 import './Ventas.css';
 import DetallesVenta from '../components/DetallesVenta.jsx';
+import { useAuth } from '../auth/AuthContext.jsx';
 
 // Pantalla principal del módulo de Ventas
 export default function Ventas() {
+    //Obtenemos los permisos asignados por Django
+    const { tienePermiso } = useAuth();
     // Estados para almacenar los registros
     const [ventas, setVentas] = useState([]);
     const [compradores, setCompradores] = useState([]);
@@ -264,11 +267,14 @@ export default function Ventas() {
                     </h1>
                     <p className="mb-0">Registro y control de ventas de materiales reciclables</p>
                 </div>
-
-                <button type="button" className="btn ventas-btn-nueva" onClick={nuevaVenta}>
-                    <i className="bi bi-plus-lg me-2"/>
-                    Nueva venta
-                </button>
+            
+                {/* Solo mostramos el botón si puede registrar ventas */}
+                {tienePermiso('ventas.add_venta') && (
+                    <button type="button" className="btn ventas-btn-nueva" onClick={nuevaVenta}>
+                        <i className="bi bi-plus-lg me-2"/>
+                        Nueva venta
+                    </button>
+                )}
             </div>
 
             {/* Tarjetas con información de las ventas */}
@@ -348,8 +354,16 @@ export default function Ventas() {
                         </p>
                         <p><strong>Total:</strong> ₡{ventaDetalle.total}</p>
 
-                        {/* Mostramos los materiales de la venta seleccionada */}
-                        <DetallesVenta key={ventaDetalle.id} venta={ventaDetalle} onActualizado={actualizarDatosVenta}/>
+                        {/* Mostramos los materiales de la venta seleccionada */}    
+                        {/* Mostramos los detalles únicamente si tiene permiso de lectura */}
+                        {tienePermiso('ventas.view_detalleventa') ? (
+                            <DetallesVenta key={ventaDetalle.id} venta={ventaDetalle} onActualizado={actualizarDatosVenta}/>
+                        ) : (
+                            <div className="alert alert-warning">
+                                No tiene permiso para consultar los materiales de esta venta.
+                            </div>
+                        )}
+
                     </div>
                 </div>
             )}
@@ -437,35 +451,46 @@ export default function Ventas() {
                                             <td>
                                                 <div className="d-flex flex-wrap gap-2">
 
-                                                    {/* Consultar la venta */}
+                                                    {/* Consultar información de la venta */}
                                                     <button type="button" className="btn btn-sm btn-outline-success" title="Consultar" onClick={() => verVenta(venta.id)}>
                                                         <i className="bi bi-eye"/>
                                                     </button>
 
-                                                    {/* Las demás acciones solo aplican a ventas pendientes */}
+                                                    {/* Estas acciones solo aplican a ventas pendientes */}
                                                     {venta.estado === 'PENDIENTE' && (
                                                         <>
-                                                            {/* Editar */}
-                                                            <button type="button" className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarVenta(venta.id)}>
-                                                                <i className="bi bi-pencil"/>
-                                                            </button>
 
-                                                            {/* Eliminar */}
-                                                            <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarVenta(venta.id)}>
-                                                                <i className="bi bi-trash"/>
-                                                            </button>
+                                                            {/* Editar venta */}
+                                                            {tienePermiso('ventas.change_venta') && (
+                                                                <button type="button" className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => editarVenta(venta.id)}>
+                                                                    <i className="bi bi-pencil"/>
+                                                                </button>
+                                                            )}
 
-                                                            {/* Confirmar */}
-                                                            <button type="button" className="btn btn-sm btn-success" title="Confirmar" onClick={() => confirmar(venta.id)}>
-                                                                <i className="bi bi-check-lg"/>
-                                                            </button>
+                                                            {/* Eliminar venta */}
+                                                            {tienePermiso('ventas.delete_venta') && (
+                                                                <button type="button" className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => eliminarVenta(venta.id)}>
+                                                                    <i className="bi bi-trash"/>
+                                                                </button>
+                                                            )}
 
-                                                            {/* Anular */}
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary" title="Anular" onClick={() => anular(venta.id)}>
-                                                                <i className="bi bi-x-lg"/>
-                                                            </button>
+                                                            {/* Confirmar venta y descontar stock */}
+                                                            {tienePermiso('ventas.change_venta') && (
+                                                                <button type="button" className="btn btn-sm btn-success" title="Confirmar" onClick={() => confirmar(venta.id)}>
+                                                                    <i className="bi bi-check-lg"/>
+                                                                </button>
+                                                            )}
+
+                                                            {/* Anular venta */}
+                                                            {tienePermiso('ventas.change_venta') && (
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary" title="Anular" onClick={() => anular(venta.id)}>
+                                                                    <i className="bi bi-x-lg"/>
+                                                                </button>
+                                                            )}
+
                                                         </>
                                                     )}
+
                                                 </div>
                                             </td>
                                         </tr>
